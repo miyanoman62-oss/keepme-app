@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeepMe | Social Media</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:15px;font-family:Arial,sans-serif;color:white;background:linear-gradient(135deg,#10172d,#253d68,#392b61)}
+.container{width:100%;max-width:600px;margin:auto}
+.logo{text-align:center;font-size:34px;font-weight:bold;color:#a9c8ff;padding:15px}
+.subtitle{text-align:center;color:#c4cde0;margin-bottom:20px}
+.card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:18px;margin-bottom:16px}
+h2{text-align:center}
+input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #52658a;border-radius:10px;background:#172541;color:white;font-size:15px;outline:none}
+textarea{min-height:90px;resize:vertical}
+button{padding:12px;border:0;border-radius:10px;background:linear-gradient(90deg,#548cff,#956cff);color:white;font-size:14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+.full{width:100%;margin-top:10px}
+.hidden{display:none!important}
+.switch{text-align:center;margin-top:18px;color:#d5dbee}
+.switch span{color:#a9c8ff;cursor:pointer;font-weight:bold}
+.message{text-align:center;margin:12px 0;font-size:14px;overflow-wrap:anywhere}
+.password-box{position:relative}
+.password-box input{padding-right:55px}
+.toggle-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;color:#a9c8ff;font-size:19px}
+.avatar-list{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:15px 0}
+.avatar-option{background:#263d68;border:2px solid transparent;border-radius:12px;padding:12px 4px;font-size:30px}
+.avatar-option.selected{border-color:#83aaff}
+.avatar-circle{width:48px;height:48px;border-radius:50%;background:#263d68;display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0}
+.profile-name{font-size:17px;font-weight:bold}
+.profile-extra{margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
+.profile-headline{font-weight:700;color:#414b70;font-size:14px;overflow-wrap:anywhere}
+.profile-status{display:inline-flex;align-self:flex-start;padding:5px 9px;border-radius:999px;background:#eef0ff;color:#5557c9;font-size:11px;font-weight:700}
+.profile-website{color:#5658c9;font-size:13px;overflow-wrap:anywhere}
+.profile-avatar{border:3px solid var(--profile-accent,#7777e8);box-shadow:0 0 0 3px color-mix(in srgb,var(--profile-accent,#7777e8) 18%,transparent)}
+.username{color:#a9c8ff;font-size:13px;margin-top:4px}
+.bio{color:#d5dbee;overflow-wrap:anywhere}
+.nav{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
+.nav button{flex:1;min-width:90px}
+.post-header{display:flex;align-items:center;gap:10px}
+.post-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;margin:16px 0}
+.post-date{font-size:11px;color:#8791a8;margin-left:auto;white-space:nowrap;text-align:right}
+.post-header{display:flex;align-items:center;gap:10px}
+.post-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.post-actions button{flex:1;min-width:74px}
+.reaction-wrap{position:relative;flex:1;min-width:100px}
+.reaction-picker{display:flex;gap:7px;flex-wrap:nowrap;position:absolute;z-index:30;left:0;bottom:calc(100% + 9px);padding:9px 11px;margin:0;background:#fff;border:1px solid #e4e0f5;border-radius:28px;box-shadow:0 5px 22px #0003;animation:reactPop .16s ease-out}.reaction-picker button{flex:0 0 auto;min-width:42px;width:42px;height:42px;padding:4px;border-radius:50%;font-size:23px;transition:transform .12s}.reaction-picker button:active{transform:scale(1.28)}@keyframes reactPop{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+.reaction-picker button{flex:1;min-width:52px;padding:8px 5px;background:#fff;color:#34345b;border:1px solid #e2e0f5}
+.reaction-summary{font-size:12px;color:#777da0;margin-top:8px}
+.post-actions{display:flex;gap:10px;margin-top:12px}
+.post-actions button{flex:1;background:#263d68}
+.post-actions button.liked{background:#654b9b}
+.comment-box{display:flex;gap:8px;margin-top:12px}
+.comment-box input{margin:0;min-width:0}
+.comment-box button{white-space:nowrap}
+.comment{padding:9px;background:#172541;border-radius:9px;margin-top:8px}
+.comment small{color:#a9c8ff}
+.logout{background:#d94b69}
+.small{text-align:center;color:#b9c8e3;font-size:12px;margin:20px}
+#notificationBadge{color:#ffe18a;font-size:12px}
+.notification-item{padding:12px;margin-top:10px;border-radius:10px;background:#172541;overflow-wrap:anywhere}
+.notification-item.unread{border:1px solid #83aaff;background:#263d68}
+.notification-time{color:#b9c8e3;font-size:11px;margin-top:5px}
+.notification-actions{display:flex;gap:8px;margin-top:10px}
+.notification-actions button{flex:1}
+/* Facebook-inspired notification center */
+.notification-toolbar{display:flex;gap:8px;margin:8px 0 16px}
+.notification-filter{flex:1;background:#f0f1f8;color:#59617a;box-shadow:none;border:1px solid #e6e8f2;padding:10px}
+.notification-filter.active{background:#e7e8ff;color:#4d4fc4;border-color:#c9cbff}
+.notification-item{position:relative;display:flex;align-items:center;gap:12px;padding:13px 12px;margin:9px 0;border:1px solid #edf0f7;border-radius:16px;background:#fff;transition:background .15s}
+.notification-item.unread{background:#f0f3ff;border:1px solid #dfe4ff}
+.notification-avatar{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eceeff;color:#5154c8;font-size:23px;font-weight:700}
+.notification-content{flex:1;min-width:0;color:#303951;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.notification-content strong{color:#202943}
+.notification-time{color:#8992a8;font-size:11px;margin-top:5px}
+.notification-unread-dot{width:9px;height:9px;border-radius:50%;background:#5965e8;flex:0 0 9px}
+.notification-item-actions{display:flex;flex-direction:column;gap:6px}
+.notification-item-actions button{padding:7px 9px;font-size:11px;box-shadow:none}
+.notification-item-actions .notification-delete{background:#f3f4f8;color:#707991}
+.notification-empty{text-align:center;padding:35px 12px;color:#8a93a9}
+.notification-empty-icon{font-size:34px;margin-bottom:8px}
+
+.hint{font-size:12px;color:#b9c8e3;line-height:1.5}
+.follow-stats{display:flex;justify-content:center;gap:25px;margin:15px 0;text-align:center}
+.follow-stats strong{display:block;font-size:20px;color:#a9c8ff}
+.follow-stats span{font-size:12px;color:#c4cde0}
+.follow-btn{min-width:110px;background:linear-gradient(90deg,#548cff,#956cff)}
+.follow-btn.following{background:#263d68;border:1px solid #83aaff}
+.user-item{display:flex;align-items:center;gap:10px;padding:12px;background:#172541;border-radius:10px;margin-top:10px}
+.user-item .user-info{flex:1;min-width:0}
+.user-item button{min-width:90px}
+.section-title{color:#a9c8ff;font-size:17px;margin:18px 0 10px}
+
+/* KeepMe modern UI refresh — styling only; existing Firebase logic is unchanged */
+body{
+  background:linear-gradient(145deg,#f4f6ff 0%,#eef2ff 48%,#f8f4ff 100%);
+  color:#17213b;padding:18px 14px 28px;
+}
+.container{max-width:680px}
+.logo{
+  color:#4f46e5;font-size:36px;letter-spacing:-1.2px;
+  padding:18px 12px 6px;text-shadow:0 5px 18px rgba(79,70,229,.12)
+}
+.subtitle{color:#68738e;font-size:14px;margin-bottom:22px}
+.card{
+  background:rgba(255,255,255,.94);color:#17213b;
+  border:1px solid #e5e9f5;border-radius:22px;padding:20px;
+  margin-bottom:16px;box-shadow:0 10px 30px rgba(39,52,99,.07)
+}
+h2{color:#202b49;letter-spacing:-.35px}
+input,textarea{
+  background:#f7f8fc;color:#17213b;border:1px solid #e1e6f1;
+  border-radius:13px;padding:14px;font-size:15px
+}
+input::placeholder,textarea::placeholder{color:#929bb0}
+input:focus,textarea:focus{border-color:#818cf8;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+button{
+  background:linear-gradient(110deg,#5b5ce2,#8172ed);
+  border-radius:13px;padding:13px 15px;
+  box-shadow:0 5px 13px rgba(91,92,226,.14);
+  transition:transform .15s ease,filter .15s ease
+}
+button:active{transform:scale(.98)}
+button:disabled{box-shadow:none}
+.full{margin-top:12px}
+.switch{color:#69748e}
+.switch span{color:#514bd5}
+.message{font-weight:600}
+.avatar-option{background:#f0f2ff;color:#26345b;border:2px solid #e2e6ff}
+.avatar-option.selected{border-color:#6667e8;background:#e8e9ff}
+.avatar-circle{background:#eef0ff;color:#27335b;border:1px solid #e0e5ff}
+.username{color:#6266d9}
+.bio{color:#66718b}
+.nav{
+  position:sticky;top:8px;z-index:5;gap:7px;padding:8px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border:1px solid #e5e9f5;border-radius:18px;
+  box-shadow:0 8px 24px rgba(39,52,99,.08)
+}
+.nav button{min-width:0;padding:11px 8px;font-size:13px;box-shadow:none}
+.nav button:not(.logout){background:#eef0ff;color:#4647b8}
+.nav button:not(.logout):focus{background:#dedfff}
+.post-header{color:#202b49}
+.post-text{color:#26324d}
+.post-date{color:#929bb0}
+.post-actions button{background:#eef0ff;color:#4e50b8;box-shadow:none}
+.post-actions button.liked{background:#e6e4ff;color:#5146c8}
+.post-actions button.saved-active{background:#e6e4ff;color:#5146c8}
+.comment{background:#f3f5fb;color:#26324d}
+.comment small{color:#5d61c9}
+.logout{background:#fff0f1;color:#c13e58;border:1px solid #ffdce2}
+#notificationBadge{color:#c04b35;font-weight:700}
+.notification-item{background:#f4f5fb;color:#29344f}
+.notification-item.unread{border:1px solid #8b8cf0;background:#eeefff}
+.notification-time{color:#8791a8}
+.hint{color:#818ba2}
+.follow-stats strong{color:#5557cf}
+.follow-stats span{color:#77819a}
+.follow-btn{background:linear-gradient(110deg,#5b5ce2,#8172ed);color:white}
+.follow-btn.following{background:#eef0ff;color:#4e50b8;border:1px solid #cfd2ff}
+.user-item{background:#f5f6fc;color:#26324d;border:1px solid #e9ecf5}
+.section-title{color:#5658c9}
+.small{color:#929bb0}
+@media(max-width:420px){
+  body{padding:10px 9px 22px}
+  .card{padding:16px;border-radius:18px}
+  .nav{gap:5px;padding:6px}
+  .nav button{font-size:11px;padding:10px 5px}
+  .logo{font-size:33px}
+}
+
+
+/* Compact KeepMe navigation and post controls */
+.nav{display:grid;grid-template-columns:1fr 1fr 1.15fr 1fr 44px;align-items:center;position:sticky;top:7px}
+.nav>button{width:100%;min-width:0}
+.nav .brand-tab{background:#eef0ff;color:#4647b8;font-size:15px;font-weight:800}
+.more-wrap{position:relative;min-width:0}
+.more-wrap>#moreMenuBtn{width:44px;min-width:44px;font-size:22px;padding:8px;background:#eef0ff;color:#4647b8}
+.more-menu{position:absolute;right:0;top:calc(100% + 8px);width:190px;padding:8px;background:#fff;border:1px solid #e5e9f5;border-radius:14px;box-shadow:0 12px 30px rgba(30,40,80,.18);z-index:30}
+.more-menu button{display:block;width:100%;text-align:left;margin:3px 0;background:#f3f4ff;color:#33365f;box-shadow:none}
+.more-menu .logout{background:#fff0f1;color:#c13e58}
+#createPostCard{padding:12px 15px;margin-bottom:13px;border-radius:17px}
+#createPostCard h2{font-size:17px;margin:2px 0 7px}
+#createPostCard textarea{min-height:58px;height:58px;margin:3px 0;padding:10px 12px}
+#createPostCard .full{width:auto;min-width:112px;display:block;margin:7px 0 0 auto;padding:9px 14px}
+.post-topline{display:flex;align-items:center;gap:8px}
+.post-menu-wrap{position:relative;margin-left:auto}
+.post-menu-btn{background:#f0f1ff!important;color:#4e50b8!important;padding:6px 11px!important;font-size:20px!important;box-shadow:none!important}
+.post-menu{position:absolute;right:0;top:calc(100% + 5px);width:145px;padding:6px;background:#fff;border:1px solid #e5e9f5;border-radius:12px;box-shadow:0 10px 25px rgba(30,40,80,.16);z-index:20}
+.post-menu button{display:block;width:100%;margin:3px 0;text-align:left;background:#f3f4ff!important;color:#33365f!important;box-shadow:none!important;padding:9px!important}
+.reaction-picker{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.reaction-picker button{background:#f0f1ff;color:#4547a8;box-shadow:none}
+@media(max-width:420px){.nav{grid-template-columns:1fr 1fr 1.05fr 1fr 40px;gap:4px}.nav button{font-size:11px;padding:9px 4px}.more-wrap>#moreMenuBtn{width:40px;min-width:40px}.post-actions{gap:6px}.post-actions button{font-size:12px;padding:9px 6px}}
+
+
+/* Header layout: KeepMe wordmark; shortcuts appear only inside the feed */
+.top-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 2px 18px;min-height:72px}
+.brand-stack{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.top-header .subtitle{display:none;margin:0 0 0 8px;text-align:left;font-size:12px;letter-spacing:.35px;color:#77809b;font-weight:600}
+body.app-active .top-header .subtitle{display:block}
+.logo{width:auto;height:auto;flex:0 1 auto;border:0;border-radius:0;display:block;padding:14px 8px 8px;font-size:42px;font-weight:900;letter-spacing:-2px;background:transparent;text-shadow:0 3px 0 rgba(79,70,229,.10),0 8px 22px rgba(79,70,229,.16);background:linear-gradient(100deg,#3730a3 5%,#6259e8 48%,#a06bea 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top-shortcuts{display:none;align-items:center;gap:8px}
+body.app-active .top-shortcuts{display:flex}
+.top-shortcuts button{width:42px;height:42px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eef0ff;color:#4647b8;font-size:18px;box-shadow:0 4px 12px rgba(60,65,150,.12)}
+.nav{display:flex;align-items:center;justify-content:flex-start;gap:10px;position:sticky;top:7px;z-index:5;padding:7px;margin:0 0 15px}
+.nav #feedTab{width:auto;max-width:240px;min-width:105px;border-radius:16px}
+.nav #followingNavTab{width:auto;min-width:105px;border-radius:16px;background:#eef0ff;color:#4647b8;box-shadow:none}
+.nav #feedTab,.nav #followingNavTab{border:1px solid #dfe2f5;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.nav #feedTab.active-tab,.nav #followingNavTab.active-tab{background:linear-gradient(110deg,#514bd5,#8b70ee)!important;color:#fff!important;border-color:#514bd5;box-shadow:0 5px 13px rgba(91,92,226,.18)}
+.nav .more-wrap{margin-left:auto;position:relative;right:auto;flex:0 0 auto}
+@media(max-width:420px){.nav{gap:8px}.nav #feedTab,.nav #followingNavTab{min-width:0}.nav .more-wrap{margin-left:auto}.top-header{gap:8px}.top-shortcuts{gap:5px}.top-shortcuts button{width:38px;height:38px;font-size:16px}.logo{font-size:36px;letter-spacing:-1.7px}.nav{padding:6px;gap:5px}.nav #feedTab,.nav #followingNavTab{min-width:0;padding:10px 12px}.nav #feedTab{max-width:none}}
+
+/* Profile layout: avatar and identity on the left, follow counts on the right */
+.profile-card{text-align:left}
+.profile-heading{margin:0 0 18px;text-align:left}
+.profile-topline{display:flex;align-items:center;gap:13px;min-width:0}
+.profile-avatar{width:78px;height:78px;font-size:43px;flex:0 0 78px}
+.profile-identity{flex:1;min-width:0}
+.profile-name{font-size:19px;font-weight:800;color:#202b49;overflow-wrap:anywhere}
+.profile-identity .bio{margin:7px 0 0;font-size:13px;line-height:1.4}
+.profile-stats{display:flex;gap:5px;flex:0 0 auto}
+.profile-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 7px;min-width:65px;background:#f0f0ff;color:#4548b9;box-shadow:none;border:1px solid #e1e2fb}
+.profile-stat strong{font-size:17px}.profile-stat span{font-size:10px;font-weight:600}
+.profile-post-heading{text-align:left;margin:20px 4px 12px;font-size:20px}
+
+/* Profile post cards: keep the same actions/menu as the main feed */
+#myUserPosts .profile-post-card,
+#otherUserPosts .profile-post-card{margin-bottom:14px}
+#myUserPosts .post-header,
+#otherUserPosts .post-header{display:flex;align-items:center;gap:10px;color:#f5f7ff}
+#myUserPosts .feed-author-name,
+#otherUserPosts .feed-author-name{color:#f5f7ff!important;font-weight:700}
+#myUserPosts .feed-author-username,
+#otherUserPosts .feed-author-username{color:#b8c4ff!important;font-size:13px}
+#myUserPosts .post-text,
+#otherUserPosts .post-text{color:#f2f4ff!important;white-space:pre-wrap;overflow-wrap:anywhere}
+#myUserPosts .post-date,
+#otherUserPosts .post-date{color:#b5bfd8!important;font-size:11px}
+#myUserPosts .post-actions,
+#otherUserPosts .post-actions{display:flex;align-items:center;justify-content:space-around;gap:9px;margin-top:14px}
+#myUserPosts .post-actions .icon-action,
+#otherUserPosts .post-actions .icon-action{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 8px;border-radius:14px;background:#303b60;color:#edf0ff;box-shadow:none;font-size:17px;font-weight:700}
+#myUserPosts .post-actions .icon-action .action-count,
+#otherUserPosts .post-actions .icon-action .action-count{font-size:13px;font-weight:700}
+#myUserPosts .post-actions .icon-action.liked,
+#otherUserPosts .post-actions .icon-action.liked{background:#51458b;color:#fff}
+#myUserPosts .reaction-summary,
+#otherUserPosts .reaction-summary{color:#c6cce0}
+#myUserPosts .post-menu-btn,
+#otherUserPosts .post-menu-btn{min-width:40px;padding:6px 11px!important;background:#eef0ff!important;color:#4e50b8!important;font-size:20px!important}
+#myUserPosts .comment,
+#otherUserPosts .comment{color:#edf0ff;background:#273452}
+@media(max-width:390px){
+ #myUserPosts .post-actions,
+ #otherUserPosts .post-actions{gap:6px}
+ #myUserPosts .post-actions .icon-action,
+ #otherUserPosts .post-actions .icon-action{padding:10px 5px;gap:5px;font-size:16px}
+}
+
+/* User-selectable public profile themes and layouts */
+.profile-card[data-profile-theme="ocean"]{background:linear-gradient(145deg,#e8f4ff,#dce8ff 55%,#e9e1ff);border-color:#cbdcff;color:#172b4d}
+.profile-card[data-profile-theme="midnight"]{background:linear-gradient(145deg,#17233f,#263b63 58%,#392b61);border-color:#40557e;color:#f5f7ff}
+.profile-card[data-profile-theme="lavender"]{background:linear-gradient(145deg,#f4eaff,#e8e4ff 55%,#fce8f4);border-color:#e4d5fa;color:#392d55}
+.profile-card[data-profile-theme="forest"]{background:linear-gradient(145deg,#e5f5ec,#cfe9dc 55%,#e5f0d9);border-color:#c6e2d1;color:#173f31}
+.profile-card[data-profile-theme="sunset"]{background:linear-gradient(145deg,#fff0df,#ffe0d8 55%,#f8e1f1);border-color:#f4d4c9;color:#573348}
+.profile-card[data-profile-theme="rose"]{background:linear-gradient(145deg,#fff0f5,#f8deea 55%,#eee3ff);border-color:#efd0df;color:#573247}
+.profile-card[data-profile-theme="midnight"] .profile-name,
+.profile-card[data-profile-theme="midnight"] .bio,
+.profile-card[data-profile-theme="midnight"] .username,
+.profile-card[data-profile-theme="midnight"] .profile-headline,
+.profile-card[data-profile-theme="midnight"] .profile-post-heading{color:#f5f7ff}
+.profile-card[data-profile-theme="ocean"] .profile-name,
+.profile-card[data-profile-theme="ocean"] .bio,
+.profile-card[data-profile-theme="ocean"] .username,
+.profile-card[data-profile-theme="ocean"] .profile-headline,
+.profile-card[data-profile-theme="lavender"] .profile-name,
+.profile-card[data-profile-theme="lavender"] .bio,
+.profile-card[data-profile-theme="lavender"] .username,
+.profile-card[data-profile-theme="lavender"] .profile-headline,
+.profile-card[data-profile-theme="forest"] .profile-name,
+.profile-card[data-profile-theme="forest"] .bio,
+.profile-card[data-profile-theme="forest"] .username,
+.profile-card[data-profile-theme="forest"] .profile-headline,
+.profile-card[data-profile-theme="sunset"] .profile-name,
+.profile-card[data-profile-theme="sunset"] .bio,
+.profile-card[data-profile-theme="sunset"] .username,
+.profile-card[data-profile-theme="sunset"] .profile-headline,
+.profile-card[data-profile-theme="rose"] .profile-name,
+.profile-card[data-profile-theme="rose"] .bio,
+.profile-card[data-profile-theme="rose"] .username,
+.profile-card[data-profile-theme="rose"] .profile-headline{color:inherit}
+.profile-card[data-profile-theme="midnight"] .profile-status{background:#35466b;color:#f5f7ff}
+.profile-card[data-profile-layout="centered"] .profile-topline{flex-direction:column;text-align:center}
+.profile-card[data-profile-layout="centered"] .profile-identity{width:100%}
+.profile-card[data-profile-layout="centered"] .profile-extra{align-items:center}
+.profile-card[data-profile-layout="centered"] .profile-stats{justify-content:center}
+.profile-card[data-profile-layout="compact"]{padding:13px;border-radius:15px}
+.profile-card[data-profile-layout="compact"] .profile-avatar{width:58px;height:58px;flex-basis:58px;font-size:32px}
+.profile-card[data-profile-layout="compact"] .profile-name{font-size:16px}
+.profile-card[data-profile-layout="compact"] .profile-extra{margin-top:5px;gap:3px}
+
+@media(max-width:390px){.profile-topline{gap:8px}.profile-avatar{width:62px;height:62px;flex-basis:62px;font-size:35px}.profile-name{font-size:16px}.profile-stat{min-width:54px;padding:7px 4px}.profile-stat strong{font-size:15px}.profile-stat span{font-size:9px}}
+
+
+
+/* Messenger-style chat list and private conversation */
+.messenger-card{padding:17px 15px;overflow:hidden}
+.messenger-heading{display:flex;align-items:center;justify-content:space-between;margin:0 3px 12px}
+.messenger-heading h2{margin:0;text-align:left;font-size:25px;letter-spacing:-.7px}
+.messenger-heading .hint{margin:4px 0 0}
+.messenger-mark{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eeefff;color:#5658cf;font-size:21px}
+.chat-search{margin:4px 0 13px!important;border:0!important;background:#f0f2f8!important;border-radius:14px!important;padding:13px 15px!important}
+.chat-list{display:flex;flex-direction:column;gap:3px}
+.chat-row{display:flex;align-items:center;gap:11px;padding:10px 5px;border-bottom:1px solid #edf0f6;min-width:0}
+.chat-row:last-child{border-bottom:0}
+.chat-avatar-btn{width:54px;height:54px;flex:0 0 54px;border-radius:50%;padding:0;background:#eef0ff;color:#30365c;font-size:29px;box-shadow:none;border:1px solid #e1e5f6;display:flex;align-items:center;justify-content:center}
+.chat-row-main{flex:1;min-width:0;display:block;text-align:left;padding:2px 0;background:transparent!important;color:#202b49!important;box-shadow:none!important;border:0;border-radius:0}
+.chat-row-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.chat-row-name{font-size:15px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-row-time{font-size:10px;color:#929bb0;white-space:nowrap;font-weight:500}
+.chat-row-username{display:block;font-size:11px;color:#777f9a;margin-top:2px}
+.chat-row-preview{font-size:12px;color:#717b93;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;font-weight:400}
+.chat-empty{padding:35px 12px;text-align:center;color:#818ba2;font-size:13px;line-height:1.6}
+.conversation-header{display:flex;align-items:center;gap:10px;padding:0 0 13px;border-bottom:1px solid #edf0f6}
+.chat-back-btn{width:38px;height:38px;flex:0 0 38px;padding:0;border-radius:50%;background:#eef0ff;color:#4e50b8;box-shadow:none;font-size:20px}
+.conversation-avatar{width:43px;height:43px;flex:0 0 43px;font-size:25px}
+.conversation-person{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.conversation-person strong{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#202b49}
+.conversation-person small{font-size:11px;color:#858da3}
+.conversation-profile-btn{padding:8px 11px;background:#eef0ff;color:#4e50b8;box-shadow:none;font-size:11px}
+.chat-messages{height:min(55vh,470px);min-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:14px 8px;margin:10px 0 12px;background:#f7f8fc;border-radius:16px;scroll-behavior:smooth}
+.chat-bubble{max-width:82%;padding:10px 13px;border-radius:17px;overflow-wrap:anywhere;white-space:pre-wrap;font-size:14px;line-height:1.45;box-shadow:0 2px 5px rgba(30,40,80,.05)}
+.chat-bubble.incoming{align-self:flex-start;background:#fff;color:#26324d;border:1px solid #edf0f6;border-bottom-left-radius:5px}
+.chat-bubble.outgoing{align-self:flex-end;background:linear-gradient(110deg,#5b5ce2,#8172ed);color:#fff;border-bottom-right-radius:5px}
+.chat-bubble-time{display:block;margin-top:5px;font-size:10px;opacity:.68;text-align:right}
+.chat-composer{display:flex;align-items:flex-end;gap:8px}
+.chat-composer textarea{flex:1;min-height:44px;height:44px;max-height:110px;resize:vertical;margin:0;padding:12px 13px;background:#f0f2f8;border:0;border-radius:16px}
+.chat-composer button{width:46px;height:44px;flex:0 0 46px;padding:0;border-radius:15px;font-size:20px}
+.chat-safety-note{margin:9px 3px 0;font-size:10px}
+@media(max-width:420px){.messenger-card{padding:14px 11px}.chat-avatar-btn{width:49px;height:49px;flex-basis:49px;font-size:26px}.chat-row{gap:9px}.chat-row-name{font-size:14px}.chat-messages{height:55vh;min-height:230px}.chat-bubble{max-width:88%}}
+
+
+/* Settings + dark appearance */
+.settings-select{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #e1e6f1;border-radius:12px;background:#f7f8fc;color:#17213b;font-size:14px}
+.settings-label{display:block;font-size:13px;font-weight:700;color:#59647d;margin-top:8px}
+.typing-indicator{min-height:18px;padding-left:8px;font-style:italic}
+.reply-preview{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;margin:6px 0;background:#eef0ff;border-left:3px solid #6667e8;border-radius:9px;color:#34385d;font-size:12px}
+.reply-preview button{padding:4px 9px;background:#dfe2fa;color:#34385d;box-shadow:none}
+.reply-to{font-size:11px;opacity:.78;border-left:2px solid currentColor;padding-left:7px;margin-bottom:5px}
+.chat-reply-btn{display:block;margin:5px 0 0 auto;padding:4px 8px;font-size:10px;background:#e8eaff;color:#4548ad;box-shadow:none}
+.chat-status{display:block;font-size:10px;text-align:right;opacity:.8;margin-top:2px}
+body.dark-mode{background:linear-gradient(145deg,#101525,#171e35 55%,#211b36);color:#edf0ff}
+body.dark-mode .card{background:#1d2740;color:#edf0ff;border-color:#34415f;box-shadow:0 10px 30px #0003}
+body.dark-mode h2,body.dark-mode h3,body.dark-mode .post-header,body.dark-mode .post-text{color:#edf0ff}
+body.dark-mode .subtitle,body.dark-mode .switch,body.dark-mode .hint,body.dark-mode .bio,body.dark-mode .small{color:#b7c1dc}
+body.dark-mode input,body.dark-mode textarea,body.dark-mode .settings-select{background:#111a30;color:#edf0ff;border-color:#3a496b}
+body.dark-mode input::placeholder,body.dark-mode textarea::placeholder{color:#9ba8c5}
+body.dark-mode .nav{background:#1b2540;border-color:#34415f}
+body.dark-mode .nav button:not(.logout),body.dark-mode .more-wrap>#moreMenuBtn{background:#303b60;color:#e5e8ff}
+body.dark-mode .more-menu{background:#1d2740;border-color:#394665}
+body.dark-mode .more-menu button{color:#edf0ff}
+body.dark-mode .user-item,body.dark-mode .comment,body.dark-mode .notification-item{background:#26324f;color:#edf0ff;border-color:#3a496b}
+body.dark-mode .chat-messages{background:#111a30}
+body.dark-mode .chat-bubble.incoming{background:#26324f;color:#edf0ff;border-color:#3a496b}
+body.dark-mode .chat-composer textarea{background:#111a30;color:#edf0ff}
+body.dark-mode .reply-preview{background:#303b60;color:#edf0ff}
+body.dark-mode .chat-reply-btn{background:#303b60;color:#edf0ff}
+body.dark-mode .avatar-circle{background:#303b60;color:#edf0ff;border-color:#465477}
+
+
+/* Feed author contrast and compact icon actions */
+.feed-author-name{font-size:16px;font-weight:800;color:#202b49!important;line-height:1.25;overflow-wrap:anywhere}
+.feed-author-username{font-size:12px;font-weight:600;color:#5b61c9!important;margin-top:4px;overflow-wrap:anywhere}
+body.dark-mode .feed-author-name{color:#f5f7ff!important}
+body.dark-mode .feed-author-username{color:#b8c4ff!important}
+body.dark-mode .post-date{color:#b5bfd8!important}
+.post-actions{display:flex;align-items:center;justify-content:space-around;gap:9px;margin-top:14px}
+.post-actions .icon-action{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 8px;border-radius:14px;background:#eef0ff;color:#4c50b8;box-shadow:none;font-size:17px;font-weight:700}
+.post-actions .icon-action .action-count{font-size:13px;font-weight:700;color:inherit}
+.post-actions .icon-action.liked{background:#e7e5ff;color:#5146c8}
+body.dark-mode .post-actions .icon-action{background:#303b60;color:#edf0ff}
+body.dark-mode .post-actions .icon-action.liked{background:#51458b;color:#fff}
+.post-actions .reaction-wrap{flex:1;min-width:0}
+.post-actions .reaction-wrap>.icon-action{width:100%}
+.post-actions .reaction-picker{min-width:220px}
+@media(max-width:390px){
+ .post-actions{gap:6px}
+ .post-actions .icon-action{padding:10px 5px;gap:5px;font-size:16px}
+ .post-actions .icon-action .action-count{font-size:12px}
+}
+
+</style>
+<style>
+
+/* Settings page icon-led option rows */
+.settings-card{padding:22px}
+.settings-title{display:flex;align-items:center;justify-content:center;gap:11px;margin:2px 0 24px}
+.settings-title-icon{width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:#303d64;font-size:23px}
+.settings-section{padding:0 0 22px;margin:0 0 20px;border-bottom:1px solid rgba(170,190,235,.16)}
+.settings-section:last-of-type{border-bottom:0;margin-bottom:10px}
+.settings-section-title{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.settings-section-icon{width:36px;height:36px;border-radius:12px;background:#303d64;display:inline-flex;align-items:center;justify-content:center;font-size:19px}
+.settings-option-label{display:flex;align-items:center;gap:12px;margin:20px 0 9px;color:var(--text,#f4f5ff)}
+.settings-option-icon{width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:rgba(126,139,226,.17);display:inline-flex;align-items:center;justify-content:center;font-size:20px}
+.settings-option-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.settings-option-copy strong{font-size:14px;font-weight:700}
+.settings-option-copy small{font-size:11px;opacity:.68}
+.settings-label-spaced{margin-top:23px}
+.settings-card .settings-select{margin-top:0}
+.settings-save-button{display:flex;align-items:center;justify-content:center;gap:9px}
+.settings-save-button span{font-size:18px}
+.settings-status{text-align:center;margin-top:12px}
+
+</style>
+
+<style>
+.settings-check{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;margin:9px 0;border:1px solid rgba(150,170,220,.22);border-radius:13px;background:rgba(110,130,190,.08);color:inherit;font-size:14px}
+.settings-check input{width:20px;height:20px;flex:0 0 20px;margin:0;accent-color:#7167e8}
+.settings-blocked-list{display:grid;gap:9px}
+.settings-blocked-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px;border-radius:12px;background:rgba(110,130,190,.10);overflow-wrap:anywhere}
+.settings-blocked-item span{min-width:0;font-size:13px}
+.settings-blocked-item button{padding:8px 11px;white-space:nowrap}
+.settings-about-row{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(150,170,220,.18);font-size:13px}
+.settings-about-row strong{text-align:right}
+body.large-text-setting{font-size:18px}
+body.large-text-setting .hint,body.large-text-setting .settings-option-copy small{font-size:14px}
+body.reduce-motion-setting *,body.reduce-motion-setting *:before,body.reduce-motion-setting *:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+body.high-contrast-setting .card{border:2px solid #9eaeff;box-shadow:0 0 0 1px #5367a6}
+body.high-contrast-setting .hint{color:#e0e7ff}
+.settings-section{scroll-margin-top:15px}
+
+
+/* Create Post draft three-dot menu */
+.create-post-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.create-post-heading h2{margin:0}
+.draft-menu-wrap{position:relative;z-index:20}
+.draft-menu-toggle{width:38px;height:38px;border:1px solid rgba(169,200,255,.35);border-radius:11px;background:rgba(169,200,255,.10);color:inherit;font-size:25px;line-height:1;cursor:pointer}
+.draft-menu{position:absolute;right:0;top:44px;min-width:175px;padding:6px;background:#182541;border:1px solid rgba(169,200,255,.28);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.32);display:flex;flex-direction:column;gap:3px}
+.draft-menu.hidden{display:none}
+.draft-menu button{width:100%;text-align:left;border:0;border-radius:8px;background:transparent;color:#eef4ff;padding:11px 12px;cursor:pointer;font-size:14px}
+.draft-menu button:active,.draft-menu button:hover{background:rgba(169,200,255,.16)}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="top-header">
+ <div class="brand-stack">
+  <div class="logo">KeepMe</div>
+  <div class="subtitle">Connect, Share, Stay Together</div>
+ </div>
+ <div class="top-shortcuts">
+  <button id="profileTab" type="button" aria-label="Profile" title="Profile">👤</button>
+  <button id="searchTab" type="button" aria-label="Search" title="Search">🔎</button>
+  <button id="chatTab" type="button" aria-label="Chats" title="Chats">💬</button>
+ </div>
+</div>
+
+<div id="authSection" class="card">
+ <div id="loginBox">
+  <h2>Welcome Back</h2>
+  <input id="loginId" placeholder="Login ID or old Phone Number" autocomplete="username">
+  <div class="password-box">
+   <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+   <button type="button" class="toggle-password" onclick="togglePassword('loginPassword',this)">👁</button>
+  </div>
+  <button id="loginBtn" class="full">Sign In</button>
+  <div class="switch">New to KeepMe? <span id="showSignup">Create Account</span></div>
+ </div>
+ <div id="signupBox" class="hidden">
+  <h2>Create Account</h2>
+  <input id="signupName" placeholder="Full Name">
+  <input id="signupPhone" type="tel" placeholder="Phone Number (01XXXXXXXXX)">
+  <input id="signupLoginId" placeholder="Create Login ID (e.g. kawser01)" autocomplete="username">
+  <div class="hint">Login ID: 3-20 characters. Use letters, numbers or underscore.</div>
+  <div class="password-box">
+   <input id="signupPassword" type="password" placeholder="Create Password" autocomplete="new-password">
+   <button type="button" class="toggle-password" onclick="togglePassword('signupPassword',this)">👁</button>
+  </div>
+  <button id="signupBtn" class="full">Create Account</button>
+  <div class="switch">Already have an account? <span id="showLogin">Login</span></div>
+ </div>
+</div>
+
+<div id="profileSetup" class="card hidden">
+ <h2>Complete Your Profile</h2>
+ <div class="avatar-circle" id="avatarPreview" style="width:110px;height:110px;margin:auto;font-size:60px">👦🏻</div>
+ <p>Choose Avatar</p>
+ <div id="avatarList" class="avatar-list"></div>
+ <input id="profileName" placeholder="Your Name" maxlength="40">
+ <label for="profileBirthday" class="hint">Birthday (optional)</label><input id="profileBirthday" type="date" aria-label="Birthday">
+ <input id="username" placeholder="Username (3-20 characters)" maxlength="20">
+ <textarea id="bio" placeholder="Write something about yourself..." maxlength="160"></textarea>
+ <input id="profileHeadline" placeholder="Profile headline (e.g. Student | Creator)" maxlength="60">
+ <input id="profileStatus" placeholder="Short status (max 40 characters)" maxlength="40">
+ <input id="profileWebsite" type="url" placeholder="Website URL (https://example.com)" maxlength="120">
+ <label for="profileAccent" class="hint">Profile accent colour</label>
+ <select id="profileAccent" class="settings-select">
+  <option value="indigo">Indigo</option><option value="blue">Blue</option><option value="purple">Purple</option><option value="teal">Teal</option><option value="rose">Rose</option><option value="gold">Gold</option>
+ </select>
+ <label for="profileTheme" class="hint">Profile Theme / Background</label>
+ <select id="profileTheme" class="settings-select">
+  <option value="ocean">Ocean Blue</option><option value="midnight">Midnight</option><option value="lavender">Lavender</option><option value="forest">Forest</option><option value="sunset">Sunset</option><option value="rose">Rose Garden</option>
+ </select>
+ <label for="profileLayout" class="hint">Profile Layout</label>
+ <select id="profileLayout" class="settings-select">
+  <option value="classic">Classic</option><option value="centered">Centered</option><option value="compact">Compact</option>
+ </select>
+ <p class="hint">Choose a background theme and layout for your public profile.</p>
+ <button id="saveProfile" class="full">Save Profile</button>
+</div>
+
+<div id="mainApp" class="hidden">
+ <div class="nav">
+  <button id="feedTab" class="brand-tab active-tab">⌂ Home</button>
+  <button id="followingNavTab" type="button">Following</button>
+  <div class="more-wrap"><button id="moreMenuBtn" type="button" aria-expanded="false" aria-label="More options">⋮</button><div id="moreMenu" class="more-menu hidden">
+   <button id="savedTab" type="button">🔖 Saved</button>
+   <button id="settingsTab" type="button">⚙️ Settings</button>
+   <button id="notificationTab" type="button">🔔 Notifications <span id="notificationBadge"></span></button>
+   <button id="adminTab" class="hidden" type="button">🛡️ Admin</button>
+   <button id="logoutBtn" class="logout" type="button">Logout</button>
+  </div></div>
+ </div>
+ <div id="adminPage" class="hidden">
+  <div class="card">
+   <h2>🛡️ Admin Dashboard</h2>
+   <p class="hint">Review user reports. Check each report carefully before taking action.</p>
+   <button id="refreshReports" class="full" type="button">Refresh Reports</button>
+   <div id="adminReportStatus" class="hint" style="margin-top:10px"></div>
+   <div id="adminReports"></div>
+   <hr style="border-color:#52658a;margin:22px 0">
+   <h2>👥 User Management</h2>
+   <p class="hint">View registered profiles and suspend or reactivate access to KeepMe.</p>
+   <button id="refreshUsers" class="full" type="button">Refresh Users</button>
+   <div id="adminUserStatus" class="hint" style="margin-top:10px"></div>
+   <div id="adminUsers"></div>
+  </div>
+ </div>
+ <div id="feedPage">
+  <div class="card" id="createPostCard">
+   <div class="create-post-heading">
+    <h2>Create Post</h2>
+    <div class="draft-menu-wrap">
+     <button id="draftMenuToggle" class="draft-menu-toggle" type="button" aria-label="Draft options" aria-expanded="false">⋮</button>
+     <div id="draftMenu" class="draft-menu hidden">
+      <button id="saveDraftBtn" type="button">💾 Save Draft</button>
+      <button id="loadDraftBtn" type="button">📝 Load Draft</button>
+      <button id="clearDraftBtn" type="button">🗑 Clear Draft</button>
+     </div>
+    </div>
+   </div>
+   <textarea id="postText" maxlength="1000" placeholder="What's on your mind?"></textarea>
+   <p class="hint" id="draftStatus" aria-live="polite"></p>
+   <button id="publishBtn" class="full">Publish Post</button>
+  </div>
+  <h2>Latest Posts</h2><div id="feedList"></div>
+ </div>
+ <div id="searchPage" class="hidden">
+  <div class="card">
+   <h2>🔎 Find People</h2>
+   <p class="hint">Search by username (without @).</p>
+   <input id="userSearchInput" placeholder="Enter username..." maxlength="20" autocomplete="off">
+   <button id="userSearchBtn" class="full">Search Users</button>
+   <div id="userSearchStatus" class="hint" style="margin-top:12px"></div>
+   <div id="userSearchResults"></div>
+  </div>
+ </div>
+ <div id="chatPage" class="hidden">
+  <div class="card messenger-card" id="chatListCard">
+   <div class="messenger-heading"><div><h2>Messages</h2><p class="hint">Your KeepMe conversations</p></div><span class="messenger-mark">💬</span></div>
+   <input id="chatSearchInput" class="chat-search" type="search" placeholder="Search conversations..." autocomplete="off">
+   <div id="chatList" class="chat-list">Loading chats...</div>
+  </div>
+  <div class="card hidden messenger-card" id="conversationCard">
+   <div class="conversation-header">
+    <button id="backToChats" class="chat-back-btn" type="button" aria-label="Back to chats">←</button>
+    <div id="conversationAvatar" class="avatar-circle conversation-avatar">👦🏻</div>
+    <div class="conversation-person"><strong id="conversationTitle">Conversation</strong><small id="conversationUsername">KeepMe user</small></div>
+    <button id="conversationProfileBtn" class="conversation-profile-btn" type="button">Profile</button>
+   </div>
+   <div id="chatMessages" class="chat-messages"></div>
+   <div id="typingIndicator" class="hint typing-indicator"></div>
+   <div id="replyPreview" class="reply-preview hidden"><span id="replyPreviewText"></span><button id="cancelReply" type="button">×</button></div>
+   <div class="chat-composer">
+    <textarea id="chatMessageInput" maxlength="1000" placeholder="Write a message..."></textarea>
+    <button id="sendChatMessage" type="button" aria-label="Send message">➤</button>
+   </div>
+   <p class="hint chat-safety-note">Please keep messages respectful. Maximum 1000 characters.</p>
+  </div>
+ </div>
+ <div id="settingsPage" class="hidden">
+  <div class="card settings-card">
+   <h2 class="settings-title"><span class="settings-title-icon">⚙️</span> Settings</h2>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🎨</span> Appearance</h3>
+    <p class="hint">Choose how KeepMe looks on this device.</p>
+    <label class="settings-option-label" for="themeSetting"><span class="settings-option-icon">🌗</span><span class="settings-option-copy"><strong>Theme Mode</strong><small>Light, dark or system appearance</small></span></label>
+    <select id="themeSetting" class="settings-select"><option value="light">☀️ Light Mode</option><option value="dark">🌙 Dark Mode</option><option value="system">📱 System Default</option></select>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🔐</span> Privacy</h3>
+    <p class="hint">Control who can view your profile and send you messages.</p>
+    <label class="settings-option-label" for="accountPrivacy"><span class="settings-option-icon">👁️</span><span class="settings-option-copy"><strong>Account Visibility</strong><small>Choose who can view your profile</small></span></label>
+    <select id="accountPrivacy" class="settings-select"><option value="public">🌍 Public account</option><option value="private">🔒 Private account (followers only)</option></select>
+    <label class="settings-option-label settings-label-spaced" for="messagePrivacy"><span class="settings-option-icon">💬</span><span class="settings-option-copy"><strong>Message Permissions</strong><small>Choose who can send you messages</small></span></label>
+    <select id="messagePrivacy" class="settings-select"><option value="everyone">👥 Everyone</option><option value="followers">💙 People you follow</option></select>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🔔</span> Notification Settings</h3>
+    <p class="hint">Choose which notifications you want to receive in KeepMe.</p>
+    <label class="settings-check"><span>❤️ Like Notifications</span><input type="checkbox" id="notifyLikes" checked></label>
+    <label class="settings-check"><span>💬 Comment Notifications</span><input type="checkbox" id="notifyComments" checked></label>
+    <label class="settings-check"><span>👥 Follow Notifications</span><input type="checkbox" id="notifyFollows" checked></label>
+    <label class="settings-check"><span>✉️ Message Notifications</span><input type="checkbox" id="notifyMessages" checked></label>
+    <label class="settings-check"><span>🔕 Mute All Notifications</span><input type="checkbox" id="muteNotifications"></label>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🔊</span> Custom Sounds</h3>
+    <p class="hint">Choose separate sounds for notifications and Messenger. Sounds play only when this app is open.</p>
+    <label class="settings-label" for="notificationSound">Notification sound</label><select id="notificationSound" class="settings-select"><option value="off">Off</option><option value="chime">Chime</option><option value="pop">Pop</option><option value="soft">Soft tone</option></select><button id="testNotificationSound" type="button">▶ Test notification sound</button>
+    <label class="settings-label" for="messengerSound">Messenger sound</label><select id="messengerSound" class="settings-select"><option value="off">Off</option><option value="chime">Chime</option><option value="pop">Pop</option><option value="soft">Soft tone</option></select><button id="testMessengerSound" type="button">▶ Test Messenger sound</button>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🛡️</span> Security</h3>
+    <p class="hint">Change your account password. You may need to sign in again if your session is old.</p>
+    <label class="settings-option-label" for="currentPassword"><span class="settings-option-icon">🔑</span><span class="settings-option-copy"><strong>Current Password</strong><small>Verify it is your account</small></span></label>
+    <input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password">
+    <label class="settings-option-label" for="newPassword"><span class="settings-option-icon">🔒</span><span class="settings-option-copy"><strong>New Password</strong><small>At least 6 characters</small></span></label>
+    <input id="newPassword" type="password" autocomplete="new-password" placeholder="New password">
+    <button id="changePasswordBtn" type="button" class="full">🔐 Change Password</button>
+    <p class="hint" id="securityStatus"></p>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">👤</span> Account Management</h3>
+    <p class="hint">Manage your current KeepMe session.</p>
+    <button id="settingsLogout" type="button" class="full logout">🚪 Log Out of This Account</button>
+    <p class="hint">Account deactivation and permanent deletion are not available in this version.</p>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🚫</span> Blocked &amp; Restricted Accounts</h3>
+    <p class="hint">Review accounts you have blocked and unblock them if you choose.</p>
+    <div id="settingsBlockedList" class="settings-blocked-list">Loading blocked accounts...</div>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">🌐</span> Language</h3>
+    <label class="settings-option-label" for="languageSetting"><span class="settings-option-icon">🗣️</span><span class="settings-option-copy"><strong>Preferred Language</strong><small>Save your language preference</small></span></label>
+    <select id="languageSetting" class="settings-select"><option value="en">🇬🇧 English</option><option value="bn">🇧🇩 বাংলা</option></select>
+    <p class="hint">This saves your preference. Full interface translation will be added separately.</p>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">♿</span> Accessibility</h3>
+    <label class="settings-check"><span>🔎 Larger Text</span><input type="checkbox" id="largeTextSetting"></label>
+    <label class="settings-check"><span>✨ Reduce Animations</span><input type="checkbox" id="reduceMotionSetting"></label>
+    <label class="settings-check"><span>◐ High Contrast</span><input type="checkbox" id="highContrastSetting"></label>
+   </section>
+
+   <section class="settings-section">
+    <h3 class="settings-section-title"><span class="settings-section-icon">ℹ️</span> About &amp; Support</h3>
+    <div class="settings-about-row"><span>📱 App</span><strong>KeepMe</strong></div>
+    <div class="settings-about-row"><span>🏷️ Version</span><strong>1.0.0</strong></div>
+    <div class="settings-about-row"><span>💬 Help &amp; Support</span><strong>Use the in-app chat/help channel</strong></div>
+    <p class="hint">Privacy Policy and Terms &amp; Conditions links can be added when their official pages are ready.</p>
+   </section>
+
+   <button id="saveSettings" class="full settings-save-button" type="button"><span>💾</span> Save All Settings</button>
+   <p class="hint settings-status" id="settingsStatus"></p>
+  </div>
+ </div>
+ <div id="savedPage" class="hidden">
+  <div class="card"><h2>🔖 Saved Posts</h2><p class="hint">Posts you bookmark are kept here.</p><div id="savedPostsList"></div></div>
+ </div>
+ <div id="notificationPage" class="hidden">
+  <div class="card"><h2>🔔 Notifications</h2><div class="notification-toolbar"><button id="notificationAllFilter" class="notification-filter active" type="button">All</button><button id="notificationUnreadFilter" class="notification-filter" type="button">Unread</button></div><button id="markAllRead" class="full">Mark All as Read</button><div id="notificationList"></div></div>
+ </div>
+ <div id="myProfilePage" class="hidden">
+  <div class="card profile-card">
+   <h2 class="profile-heading">My Profile</h2>
+   <div class="profile-topline">
+    <div class="avatar-circle profile-avatar" id="showAvatar">👦🏻</div>
+    <div class="profile-identity"><div class="profile-name" id="showName"></div><div class="username" id="showUsername"></div><p class="bio" id="showBio"></p><div class="profile-extra"><div class="profile-headline" id="showHeadline"></div><span class="profile-status hidden" id="showStatus"></span><a class="profile-website hidden" id="showWebsite" target="_blank" rel="noopener noreferrer"></a></div></div>
+    <div class="profile-stats">
+     <button class="profile-stat" id="myFollowersBtn"><strong id="myFollowers">0</strong><span>Followers</span></button>
+     <button class="profile-stat" id="myFollowingBtn"><strong id="myFollowing">0</strong><span>Following</span></button>
+    </div>
+   </div>
+   <div id="myPresence" class="hint" style="margin:8px 0">● Status unavailable</div>
+   <button id="showMyQr" class="full" type="button">▦ My Profile QR Code</button><div id="myQrPanel" class="hidden" style="text-align:center;margin:12px 0"><img id="myQrImage" alt="My KeepMe profile QR code" style="width:190px;max-width:70%;background:white;padding:8px;border-radius:12px"><p class="hint" id="myQrText"></p></div>
+   <button id="editProfile" class="full">Edit Profile</button>
+  </div>
+  <h2 class="profile-post-heading">My Posts</h2><div id="myUserPosts"></div>
+ </div>
+ <div id="otherProfilePage" class="hidden">
+  <div class="card profile-card">
+   <button id="backToFeed" class="full">← Back</button>
+   <div class="profile-topline">
+    <div class="avatar-circle profile-avatar" id="otherAvatar">👦🏻</div>
+    <div class="profile-identity"><div class="profile-name" id="otherName"></div><div class="username" id="otherUsername"></div><p class="bio" id="otherBio"></p><div class="profile-extra"><div class="profile-headline" id="otherHeadline"></div><span class="profile-status hidden" id="otherStatus"></span><a class="profile-website hidden" id="otherWebsite" target="_blank" rel="noopener noreferrer"></a></div></div>
+    <div class="profile-stats">
+     <button class="profile-stat" id="otherFollowersBtn"><strong id="otherFollowers">0</strong><span>Followers</span></button>
+     <button class="profile-stat" id="otherFollowingBtn"><strong id="otherFollowing">0</strong><span>Following</span></button>
+    </div>
+   </div>
+   <div id="otherPresence" class="hint" style="margin:8px 0">● Status unavailable</div>
+   <button id="followUserBtn" class="follow-btn">Follow</button>
+   <button id="messageUserBtn" type="button">💬 Message</button>
+   <button id="blockUserBtn" class="logout" type="button">Block</button>
+   <button id="reportUserBtn" type="button">🚩 Report User</button>
+  </div>
+  <h2 class="profile-post-heading">Posts</h2><div id="otherUserPosts"></div>
+ </div>
+ <div id="followListPage" class="hidden">
+  <div class="card"><button id="backFromFollowList" class="full">← Back</button><h2 id="followListTitle">Followers</h2><div id="followList"></div></div>
+ </div>
+</div>
+<div id="message" class="message"></div>
+<div class="small">KeepMe © 2026</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile,EmailAuthProvider,reauthenticateWithCredential,updatePassword} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,addDoc,collection,query,orderBy,limit,onSnapshot,serverTimestamp,deleteDoc,updateDoc,where,writeBatch,getDocs} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+// Replace this value with your own Firebase Authentication UID before using Admin Dashboard.
+const ADMIN_UID = "9CXd7O3TPNdo0QvG1WFAFO0jOUe2";
+
+const firebaseConfig={
+ apiKey:"AIzaSyD4vgWUSbtSB7UwwCAFhLxQitVCs573FiQ",
+ authDomain:"keepme-f5b03.firebaseapp.com",
+ projectId:"keepme-f5b03",
+ storageBucket:"keepme-f5b03.firebasestorage.app",
+ messagingSenderId:"855134614432",
+ appId:"1:855134614432:web:ef450b0bf7bb2bccadaac5"
+};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);
+let currentUser=null,selectedAvatar="1",myProfile=null,viewingUser=null,followListReturn="myProfilePage";
+let stopFeed=null,stopLikes={},stopComments={},stopShares={},stopNotifications=null,notificationCache=[],notificationFilter="all";
+let stopMyFollowCounts=null,stopOtherFollowCounts=null;
+let activeChatId=null,activeChatPeer=null,stopChatMessages=null,stopChatMeta=null,replyTarget=null,typingTimer=null;
+const avatars={"1":"👦🏻","2":"👧🏻","3":"🧑🏻","4":"👩🏻","5":"👨🏻‍🎤","6":"👩🏻‍🎤","7":"🧑🏻‍🎤","8":"🧒🏻"};
+
+function message(text,color="#fff"){$("message").textContent=text;$("message").style.color=color;}
+function showSection(id){["authSection","profileSetup","mainApp"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");document.body.classList.toggle("app-active",id==="mainApp");message("");}
+window.togglePassword=(id,btn)=>{const field=$(id);field.type=field.type==="password"?"text":"password";btn.textContent=field.type==="password"?"👁":"🙈";};
+
+function phoneToEmail(phone){
+ let digits=phone.trim().replace(/[\s-]/g,"");
+ if(digits.startsWith("+880"))digits=digits.slice(1);
+ else if(digits.startsWith("880")){}
+ else if(digits.startsWith("01"))digits="88"+digits;
+ else throw new Error("Enter a valid Bangladesh phone number.");
+ if(!/^8801[3-9]\d{8}$/.test(digits))throw new Error("Enter a valid Bangladesh phone number.");
+ return digits+"@users.keepme.app";
+}
+function loginIdToEmail(loginId){
+ const id=loginId.trim().toLowerCase();
+ if(!/^(?=.*[a-z_])[a-z0-9_]{3,20}$/.test(id))throw new Error("Login ID must be 3-20 characters and contain a letter.");
+ return id+"@users.keepme.app";
+}
+function applyTheme(theme){
+ const dark=theme==="dark"||(theme==="system"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+ document.body.classList.toggle("dark-mode",dark);
+}
+function loadLocalTheme(){const theme=localStorage.getItem("keepmeTheme")||"light";applyTheme(theme);}
+loadLocalTheme();
+if(window.matchMedia){window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{if((localStorage.getItem("keepmeTheme")||"light")==="system")applyTheme("system");});}
+
+function applyAccessibilitySettings(){
+ document.body.classList.toggle("large-text-setting",localStorage.getItem("keepmeLargeText")==="true");
+ document.body.classList.toggle("reduce-motion-setting",localStorage.getItem("keepmeReduceMotion")==="true");
+ document.body.classList.toggle("high-contrast-setting",localStorage.getItem("keepmeHighContrast")==="true");
+}
+applyAccessibilitySettings();
+
+async function loadBlockedAccounts(){
+ const host=$("settingsBlockedList");if(!host||!currentUser)return;
+ host.textContent="Loading blocked accounts...";
+ try{
+  const snap=await getDocs(collection(db,"users",currentUser.uid,"blocked"));
+  host.innerHTML="";
+  if(snap.empty){host.textContent="You have not blocked anyone.";return;}
+  for(const item of snap.docs){
+   const row=document.createElement("div");row.className="settings-blocked-item";
+   const label=document.createElement("span");label.textContent=item.id;
+   const btn=document.createElement("button");btn.type="button";btn.textContent="Unblock";
+   btn.onclick=async()=>{
+    btn.disabled=true;
+    try{await deleteDoc(doc(db,"users",currentUser.uid,"blocked",item.id));row.remove();if(!host.children.length)host.textContent="You have not blocked anyone.";}
+    catch(e){btn.disabled=false;message("Could not unblock: "+(e.code||e.message),"#ffb4b4");}
+   };
+   row.append(label,btn);host.append(row);
+  }
+ }catch(e){host.textContent="Could not load blocked accounts: "+(e.code||e.message);}
+}
+async function loadSettings(){
+ if(!currentUser)return;
+ try{
+  const snap=await getDoc(doc(db,"users",currentUser.uid)),d=snap.exists()?snap.data():{},privacy=d.privacy||{},prefs=d.settings||{},notices=prefs.notifications||{},access=prefs.accessibility||{};
+  $("themeSetting").value=localStorage.getItem("keepmeTheme")||"light";
+  $("accountPrivacy").value=privacy.account||"public";
+  $("messagePrivacy").value=privacy.messages||"everyone";
+  $("notifyLikes").checked=notices.likes!==false;
+  $("notifyComments").checked=notices.comments!==false;
+  $("notifyFollows").checked=notices.follows!==false;
+  $("notifyMessages").checked=notices.messages!==false;
+  $("muteNotifications").checked=notices.muted===true;
+  $("languageSetting").value=prefs.language||"en";
+  $("notificationSound").value=prefs.sounds?.notifications||"chime";$("messengerSound").value=prefs.sounds?.messenger||"pop";
+  $("largeTextSetting").checked=access.largeText===true;
+  $("reduceMotionSetting").checked=access.reduceMotion===true;
+  $("highContrastSetting").checked=access.highContrast===true;
+  applyAccessibilitySettings();
+  $("settingsStatus").textContent="";
+  await loadBlockedAccounts();
+ }catch(e){$("settingsStatus").textContent="Could not load settings: "+(e.code||e.message);}
+}
+$("themeSetting").addEventListener("change",()=>{const t=$("themeSetting").value;localStorage.setItem("keepmeTheme",t);applyTheme(t);});
+$("saveSettings").onclick=async()=>{
+ if(!currentUser)return;
+ const btn=$("saveSettings");btn.disabled=true;btn.textContent="Saving...";
+ try{
+  const theme=$("themeSetting").value;
+  localStorage.setItem("keepmeTheme",theme);applyTheme(theme);
+  const accessibility={
+   largeText:$("largeTextSetting").checked,
+   reduceMotion:$("reduceMotionSetting").checked,
+   highContrast:$("highContrastSetting").checked
+  };
+  localStorage.setItem("keepmeLargeText",String(accessibility.largeText));
+  localStorage.setItem("keepmeReduceMotion",String(accessibility.reduceMotion));
+  localStorage.setItem("keepmeHighContrast",String(accessibility.highContrast));
+  applyAccessibilitySettings();
+  const privacy={account:$("accountPrivacy").value,messages:$("messagePrivacy").value};
+  const settings={
+   notifications:{
+    likes:$("notifyLikes").checked,
+    comments:$("notifyComments").checked,
+    follows:$("notifyFollows").checked,
+    messages:$("notifyMessages").checked,
+    muted:$("muteNotifications").checked
+   },
+   accessibility,
+   language:$("languageSetting").value,
+   sounds:{notifications:$("notificationSound").value,messenger:$("messengerSound").value}
+  };
+  localStorage.setItem("keepmeNotificationSound",settings.sounds.notifications);localStorage.setItem("keepmeMessengerSound",settings.sounds.messenger);
+  await setDoc(doc(db,"users",currentUser.uid),{privacy,settings,updatedAt:serverTimestamp()},{merge:true});
+  if(myProfile)myProfile.privacy=privacy;
+  $("settingsStatus").textContent="All settings saved successfully.";
+ }catch(e){console.error(e);$("settingsStatus").textContent="Save failed: "+(e.code||e.message);}
+ finally{btn.disabled=false;btn.innerHTML="<span>💾</span> Save All Settings";}
+};
+$("changePasswordBtn").onclick=async()=>{
+ const current=$("currentPassword").value,newPass=$("newPassword").value,status=$("securityStatus");
+ if(!current||!newPass){status.textContent="Enter your current and new password.";return;}
+ if(newPass.length<6){status.textContent="New password must be at least 6 characters.";return;}
+ if(!currentUser?.email){status.textContent="Could not find the signed-in email. Please sign out and sign in again.";return;}
+ const btn=$("changePasswordBtn");btn.disabled=true;status.textContent="Updating password...";
+ try{
+  const credential=EmailAuthProvider.credential(currentUser.email,current);
+  await reauthenticateWithCredential(currentUser,credential);
+  await updatePassword(currentUser,newPass);
+  $("currentPassword").value="";$("newPassword").value="";
+  status.textContent="Password changed successfully.";
+ }catch(e){
+  console.error(e);
+  status.textContent=e.code==="auth/wrong-password"?"Current password is incorrect.":e.code==="auth/requires-recent-login"?"Please sign out and sign in again, then retry.":"Password change failed: "+(e.code||e.message);
+ }finally{btn.disabled=false;}
+};
+$("settingsLogout").onclick=async()=>{
+ if(!currentUser)return;
+ const btn=$("settingsLogout");btn.disabled=true;
+ try{await signOut(auth);}
+ catch(e){$("settingsStatus").textContent="Logout failed: "+(e.code||e.message);btn.disabled=false;}
+};
+
+async function canViewUser(uid,data){
+ if(uid===currentUser.uid||(data.privacy?.account||"public")!=="private")return true;
+ const f=await getDoc(doc(db,"users",uid,"followers",currentUser.uid));return f.exists();
+}
+async function canMessageUser(uid,data){
+ if(data.privacy?.messages!=="followers")return true;
+ const f=await getDoc(doc(db,"users",currentUser.uid,"following",uid));return f.exists();
+}
+
+$("showSignup").onclick=()=>{$("loginBox").classList.add("hidden");$("signupBox").classList.remove("hidden");message("");};
+$("showLogin").onclick=()=>{$("signupBox").classList.add("hidden");$("loginBox").classList.remove("hidden");message("");};
+
+$("signupBtn").onclick=async()=>{
+ const name=$("signupName").value.trim(),phone=$("signupPhone").value.trim(),loginId=$("signupLoginId").value.trim().toLowerCase(),password=$("signupPassword").value;
+ if(!name||!phone||!loginId||!password){message("Fill in all fields.","#ffb4b4");return;}
+ if(password.length<6){message("Password must be at least 6 characters.","#ffb4b4");return;}
+ const btn=$("signupBtn");btn.disabled=true;btn.textContent="Creating Account...";
+ try{
+  phoneToEmail(phone);const email=loginIdToEmail(loginId);
+  const result=await createUserWithEmailAndPassword(auth,email,password);currentUser=result.user;
+  await updateProfile(currentUser,{displayName:name});
+  // Public profile: do not store phone number or Login ID here.
+  await setDoc(doc(db,"users",currentUser.uid),{uid:currentUser.uid,name,username:"",bio:"",avatar:"1",updatedAt:serverTimestamp()});
+  // Private account details are readable only by this account under the rules below.
+  await setDoc(doc(db,"privateUsers",currentUser.uid),{phone,loginId,updatedAt:serverTimestamp()});
+  await openProfile(currentUser);
+ }catch(error){
+  console.error(error);
+  if(error.code==="auth/email-already-in-use")message("This Login ID is already taken.","#ffb4b4");
+  else if(error.code==="auth/weak-password")message("Password is too weak.","#ffb4b4");
+  else message(error.message,"#ffb4b4");
+ }finally{btn.disabled=false;btn.textContent="Create Account";}
+};
+
+$("loginBtn").onclick=async()=>{
+ const loginId=$("loginId").value.trim(),password=$("loginPassword").value;
+ if(!loginId||!password){message("Enter Login ID and Password.","#ffb4b4");return;}
+ const btn=$("loginBtn");btn.disabled=true;btn.textContent="Signing In...";
+ try{
+  let email;
+  if(loginId.startsWith("01")||loginId.startsWith("+880")||loginId.startsWith("880"))email=phoneToEmail(loginId);
+  else email=loginIdToEmail(loginId);
+  await signInWithEmailAndPassword(auth,email,password);
+ }catch(error){
+  console.error(error);
+  if(error.code==="auth/invalid-credential")message("Incorrect Login ID or Password.","#ffb4b4");
+  else message("Login error: "+error.message,"#ffb4b4");
+ }finally{btn.disabled=false;btn.textContent="Sign In";}
+};
+
+function renderAvatars(){
+ $("avatarList").innerHTML="";
+ Object.entries(avatars).forEach(([id,emoji])=>{
+  const b=document.createElement("button");b.type="button";
+  b.className="avatar-option"+(selectedAvatar===id?" selected":"");b.textContent=emoji;
+  b.onclick=()=>{selectedAvatar=id;$("avatarPreview").textContent=emoji;renderAvatars();};
+  $("avatarList").appendChild(b);
+ });
+}
+const profileAccents={indigo:"#6667e8",blue:"#2684ff",purple:"#9563df",teal:"#159b91",rose:"#df6688",gold:"#c18a25"};
+function safeWebsite(value){
+ const raw=(value||"").trim();if(!raw)return "";
+ try{const url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);return url.protocol==="https:"?url.href:"";}catch{return "";}
+}
+const profileThemes={ocean:true,midnight:true,lavender:true,forest:true,sunset:true,rose:true};
+const profileLayouts={classic:true,centered:true,compact:true};
+function renderProfileTheme(prefix,data){
+ const card=$(prefix+"ProfileCard");
+ if(!card)return;
+ card.dataset.profileTheme=profileThemes[data.profileTheme]?data.profileTheme:"ocean";
+ card.dataset.profileLayout=profileLayouts[data.profileLayout]?data.profileLayout:"classic";
+}
+function renderProfileExtras(prefix,data){
+ const headline=$(prefix+"Headline"),status=$(prefix+"Status"),website=$(prefix+"Website");
+ headline.textContent=data.headline||"";
+ status.textContent=data.status||"";status.classList.toggle("hidden",!data.status);
+ const url=safeWebsite(data.website);website.classList.toggle("hidden",!url);
+ if(url){website.href=url;website.textContent=url.replace(/^https:\/\//,"").replace(/\/$/,"");}else{website.removeAttribute("href");website.textContent="";}
+ const avatar=$(prefix+"Avatar");if(avatar)avatar.style.setProperty("--profile-accent",profileAccents[data.profileAccent]||profileAccents.indigo);
+}
+async function openProfile(user){
+ const snap=await getDoc(doc(db,"users",user.uid)),data=snap.exists()?snap.data():{};
+ $("profileName").value=data.name||user.displayName||"";$("profileBirthday").value=data.birthday||"";$("username").value=data.username||"";$("bio").value=data.bio||"";
+ $("profileHeadline").value=data.headline||"";$("profileStatus").value=data.status||"";$("profileWebsite").value=data.website||"";$("profileAccent").value=profileAccents[data.profileAccent]?data.profileAccent:"indigo";
+ $("profileTheme").value=profileThemes[data.profileTheme]?data.profileTheme:"ocean";
+ $("profileLayout").value=profileLayouts[data.profileLayout]?data.profileLayout:"classic";
+ selectedAvatar=data.avatar||"1";$("avatarPreview").textContent=avatars[selectedAvatar]||"👦🏻";renderAvatars();showSection("profileSetup");
+}
+$("saveProfile").onclick=async()=>{
+ if(!currentUser)return;
+ const name=$("profileName").value.trim(),username=$("username").value.trim().replace(/^@/,"").toLowerCase(),bio=$("bio").value.trim();
+ const birthday=$("profileBirthday").value,headline=$("profileHeadline").value.trim(),status=$("profileStatus").value.trim(),websiteInput=$("profileWebsite").value.trim(),website=safeWebsite(websiteInput),profileAccent=$("profileAccent").value,profileTheme=$("profileTheme").value,profileLayout=$("profileLayout").value;
+ if(!name||!username){message("Name and username required.","#ffb4b4");return;}
+ if(!/^[a-z0-9_]{3,20}$/.test(username)){message("Username must be 3-20 characters.","#ffb4b4");return;}
+ if(headline.length>60||status.length>40||bio.length>160){message("Please shorten your profile text.","#ffb4b4");return;}
+ if(websiteInput&&!website){message("Please enter a valid HTTPS website URL.","#ffb4b4");return;}
+ if(!profileAccents[profileAccent]){message("Choose a valid profile colour.","#ffb4b4");return;}
+ if(!profileThemes[profileTheme]||!profileLayouts[profileLayout]){message("Choose a valid profile theme and layout.","#ffb4b4");return;}
+ const btn=$("saveProfile");btn.disabled=true;btn.textContent="Saving...";
+ try{
+  await setDoc(doc(db,"users",currentUser.uid),{uid:currentUser.uid,name,username,bio,birthday,birthdayMonthDay:birthday?birthday.slice(5):"",avatar:selectedAvatar,headline,status,website,profileAccent,profileTheme,profileLayout,updatedAt:serverTimestamp()},{merge:true});
+  await updateProfile(currentUser,{displayName:name});await loadMyProfile();showSection("mainApp");showPage("feedPage");
+  openFeed();startNotifications();startMyFollowCounts();message("Profile saved successfully!","#9cffb0");
+ }catch(error){console.error(error);message("Profile error: "+error.message,"#ffb4b4");}
+ finally{btn.disabled=false;btn.textContent="Save Profile";}
+};
+async function loadMyProfile(){
+ const snap=await getDoc(doc(db,"users",currentUser.uid));
+ if(!snap.exists()||!snap.data().username){await openProfile(currentUser);return false;}
+ myProfile=snap.data();showPresence("myPresence",myProfile);$("showAvatar").textContent=avatars[myProfile.avatar]||"👦🏻";
+ $("showName").textContent=myProfile.name||"";$("showUsername").textContent="@"+(myProfile.username||"");$("showBio").textContent=myProfile.bio||"";renderProfileExtras("show",myProfile);renderProfileTheme("show",myProfile);await loadMyUserPosts();return true;
+}
+
+let profilePostUnsubs=[];
+function clearProfilePostListeners(){
+ profilePostUnsubs.forEach(unsub=>{try{unsub();}catch(e){}});
+ profilePostUnsubs=[];
+}
+function renderProfilePostCard(postDoc,host,ownerProfile,isOwn){
+ const p=postDoc.data(),postId=postDoc.id;
+ const card=document.createElement("div");card.className="card profile-post-card";card.id="profile-post-"+postId;
+
+ const header=document.createElement("div");header.className="post-header";
+ const avatar=document.createElement("div");avatar.className="avatar-circle";
+ avatar.textContent=avatars[p.avatar||ownerProfile?.avatar]||"👦🏻";
+ const identity=document.createElement("div");identity.style.flex="1";identity.style.minWidth="0";
+ const name=document.createElement("div");name.className="feed-author-name";name.textContent=p.name||ownerProfile?.name||"KeepMe User";
+ const username=document.createElement("div");username.className="feed-author-username";username.textContent="@"+(p.username||ownerProfile?.username||"user");
+ identity.append(name,username);header.append(avatar,identity);
+ const date=document.createElement("div");date.className="post-date";
+ date.textContent=p.createdAt?.toDate?p.createdAt.toDate().toLocaleString():"Just now";header.append(date);
+
+ const menuWrap=document.createElement("div");menuWrap.className="post-menu-wrap";
+ const menuBtn=document.createElement("button");menuBtn.type="button";menuBtn.className="post-menu-btn";menuBtn.textContent="⋮";menuBtn.setAttribute("aria-label","Post options");
+ const menu=document.createElement("div");menu.className="post-menu hidden";
+ const saveAction=document.createElement("button");saveAction.type="button";saveAction.textContent="🔖 Save post";
+ const hiddenSaveButton=document.createElement("button");hiddenSaveButton.type="button";hiddenSaveButton.style.display="none";
+ saveAction.onclick=async()=>{
+  menu.classList.add("hidden");
+  try{
+   const ref=doc(db,"users",currentUser.uid,"savedPosts",postId);
+   const saved=await getDoc(ref);
+   await toggleSavePost(postId,saved.exists(),hiddenSaveButton);
+  }catch(error){message("Save error: "+(error.code||error.message),"#ffb4b4");}
+ };
+ menu.append(saveAction);
+ if(isOwn){
+  const editAction=document.createElement("button");editAction.type="button";editAction.textContent="✏️ Edit post";
+  editAction.onclick=()=>{menu.classList.add("hidden");editPost(postId,p.text||"");};
+  const deleteAction=document.createElement("button");deleteAction.type="button";deleteAction.textContent="🗑 Delete post";
+  deleteAction.onclick=()=>{menu.classList.add("hidden");deletePost(postId);};
+  menu.append(editAction,deleteAction);
+ }else{
+  const reportAction=document.createElement("button");reportAction.type="button";reportAction.textContent="🚩 Report post";
+  reportAction.onclick=()=>{menu.classList.add("hidden");reportPost(postId,p.uid);};
+  menu.append(reportAction);
+ }
+ menuBtn.onclick=e=>{e.stopPropagation();menu.classList.toggle("hidden");};
+ menuWrap.append(menuBtn,menu);header.append(menuWrap);card.append(header);
+
+ const body=document.createElement("p");body.className="post-text";body.textContent=p.text||"";card.append(body);
+
+ const actions=document.createElement("div");actions.className="post-actions";
+ const reactionWrap=document.createElement("div");reactionWrap.className="reaction-wrap";
+ const likeBtn=document.createElement("button");likeBtn.type="button";likeBtn.className="icon-action";
+ likeBtn.innerHTML='<span class="action-icon">♡</span><span class="action-count">0</span>';
+ likeBtn.title="Like post • Long press for reactions";likeBtn.setAttribute("aria-label","Like post");
+ const picker=document.createElement("div");picker.className="reaction-picker hidden";
+ const reactionOptions=[{key:"love",emoji:"❤️",label:"Love"},{key:"haha",emoji:"😂",label:"Haha"},{key:"sad",emoji:"😢",label:"Sad"},{key:"angry",emoji:"😡",label:"Angry"}];
+ let myReaction=null,holdTimer=null,longPressed=false;
+ reactionOptions.forEach(option=>{
+  const b=document.createElement("button");b.type="button";b.textContent=option.emoji;b.title=option.label;
+  b.onclick=e=>{e.stopPropagation();picker.classList.add("hidden");setPostReaction(postId,option.key,p.uid,myReaction);};
+  picker.append(b);
+ });
+ likeBtn.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button!==0)return;
+  longPressed=false;holdTimer=setTimeout(()=>{longPressed=true;picker.classList.remove("hidden");},450);
+ });
+ ["pointerup","pointerleave","pointercancel"].forEach(eventName=>likeBtn.addEventListener(eventName,()=>{
+  if(holdTimer){clearTimeout(holdTimer);holdTimer=null;}
+ }));
+ likeBtn.addEventListener("contextmenu",e=>{e.preventDefault();longPressed=true;picker.classList.remove("hidden");});
+ likeBtn.onclick=()=>{
+  if(longPressed){longPressed=false;return;}
+  picker.classList.add("hidden");setPostReaction(postId,"love",p.uid,myReaction);
+ };
+ reactionWrap.append(likeBtn,picker);
+
+ const commentBtn=document.createElement("button");commentBtn.type="button";commentBtn.className="icon-action";
+ commentBtn.innerHTML='<span class="action-icon">💬</span><span class="action-count">0</span>';
+ commentBtn.title="Comments";commentBtn.setAttribute("aria-label","Show comments");
+
+ const shareBtn=document.createElement("button");shareBtn.type="button";shareBtn.className="icon-action";
+ shareBtn.innerHTML='<span class="action-icon">↗</span><span class="action-count">0</span>';
+ shareBtn.title="Share post";shareBtn.setAttribute("aria-label","Share post");
+ shareBtn.onclick=async()=>{
+  try{await setDoc(doc(db,"posts",postId,"shares",currentUser.uid),{uid:currentUser.uid,createdAt:serverTimestamp()},{merge:true});}
+  catch(error){console.warn("Share count could not be saved:",error);}
+  await sharePost(postId,p.text||"");
+ };
+ actions.append(reactionWrap,commentBtn,shareBtn);card.append(actions,hiddenSaveButton);
+
+ const commentsArea=document.createElement("div");commentsArea.className="hidden";
+ const commentsList=document.createElement("div");
+ const commentBox=document.createElement("div");commentBox.className="comment-box";
+ const commentInput=document.createElement("input");commentInput.placeholder="Write a comment...";
+ commentInput.id="profile_comment_"+postId+"_"+Math.random().toString(36).slice(2,7);
+ const sendBtn=document.createElement("button");sendBtn.type="button";sendBtn.textContent="Send";
+ sendBtn.onclick=()=>addComment(postId,commentInput.id,p.uid);
+ commentInput.addEventListener("keydown",e=>{if(e.key==="Enter")addComment(postId,commentInput.id,p.uid);});
+ commentBox.append(commentInput,sendBtn);commentsArea.append(commentsList,commentBox);card.append(commentsArea);
+ commentBtn.onclick=()=>commentsArea.classList.toggle("hidden");
+
+ const summary=document.createElement("div");summary.className="reaction-summary";card.append(summary);
+ const likesUnsub=onSnapshot(collection(db,"posts",postId,"likes"),snap=>{
+  const counts={love:0,haha:0,sad:0,angry:0};myReaction=null;
+  snap.forEach(item=>{
+   const data=item.data(),kind=data.reaction||"love";
+   if(counts[kind]!==undefined)counts[kind]++;
+   if(item.id===currentUser.uid)myReaction=kind;
+  });
+  const active=reactionOptions.find(item=>item.key===myReaction);
+  likeBtn.querySelector(".action-icon").textContent=active?active.emoji:"♡";
+  likeBtn.querySelector(".action-count").textContent=String(snap.size);
+  likeBtn.classList.toggle("liked",!!myReaction);
+  summary.textContent=snap.size?"❤️ "+counts.love+"   😂 "+counts.haha+"   😢 "+counts.sad+"   😡 "+counts.angry:"No reactions yet";
+ });
+ const commentsUnsub=onSnapshot(query(collection(db,"posts",postId,"comments"),orderBy("createdAt","asc"),limit(30)),snap=>{
+  commentsList.innerHTML="";commentBtn.querySelector(".action-count").textContent=String(snap.size);
+  snap.forEach(commentDoc=>{
+   const c=commentDoc.data(),item=document.createElement("div");item.className="comment";
+   const strong=document.createElement("strong");strong.textContent=c.name||"User";
+   const small=document.createElement("small");small.textContent=" @"+(c.username||"user");
+   const content=document.createElement("div");content.textContent=c.text||"";
+   item.append(strong,small,content);commentsList.append(item);
+  });
+ });
+ const sharesUnsub=onSnapshot(collection(db,"posts",postId,"shares"),snap=>{
+  shareBtn.querySelector(".action-count").textContent=String(snap.size);
+ },error=>console.warn("Profile share count listener:",error));
+ profilePostUnsubs.push(likesUnsub,commentsUnsub,sharesUnsub);
+ host.append(card);
+}
+async function loadMyUserPosts(){
+ clearProfilePostListeners();
+ const host=$("myUserPosts");if(!host)return;host.innerHTML="Loading posts...";
+ try{
+  const snap=await getDocs(query(collection(db,"posts"),where("uid","==",currentUser.uid),limit(50)));
+  const posts=snap.docs.sort((a,b)=>(b.data().createdAt?.toMillis?.()||0)-(a.data().createdAt?.toMillis?.()||0));
+  host.innerHTML="";
+  if(!posts.length){host.textContent="You have not shared any posts yet.";return;}
+  posts.forEach(postDoc=>renderProfilePostCard(postDoc,host,myProfile,true));
+ }catch(error){console.error(error);host.textContent="Could not load your posts: "+(error.code||error.message);}
+}
+$("editProfile").onclick=()=>openProfile(currentUser);
+function showPage(page){["feedPage","searchPage","chatPage","settingsPage","savedPage","notificationPage","myProfilePage","otherProfilePage","followListPage","adminPage"].forEach(id=>$(id).classList.add("hidden"));$(page).classList.remove("hidden");}
+const moreMenuBtn=$("moreMenuBtn"),moreMenu=$("moreMenu");
+moreMenuBtn.onclick=()=>{const opening=moreMenu.classList.contains("hidden");moreMenu.classList.toggle("hidden",!opening);moreMenuBtn.setAttribute("aria-expanded",String(opening));};
+document.addEventListener("click",e=>{if(moreMenu&&!e.target.closest(".more-wrap")){moreMenu.classList.add("hidden");moreMenuBtn.setAttribute("aria-expanded","false");}});
+["savedTab","settingsTab","notificationTab","adminTab","logoutBtn"].forEach(id=>$(id).addEventListener("click",()=>{moreMenu.classList.add("hidden");moreMenuBtn.setAttribute("aria-expanded","false");}));
+function setMainNavActive(active){$("feedTab").classList.toggle("active-tab",active==="home");$("followingNavTab").classList.toggle("active-tab",active==="following");}
+$("feedTab").onclick=()=>{setMainNavActive("home");showPage("feedPage");};
+$("searchTab").onclick=()=>{showPage("searchPage");$("userSearchInput").focus();};
+$("savedTab").onclick=async()=>{showPage("savedPage");await loadSavedPosts();};
+$("settingsTab").onclick=async()=>{showPage("settingsPage");await loadSettings();};
+$("chatTab").onclick=async()=>{showPage("chatPage");$("chatListCard").classList.remove("hidden");$("conversationCard").classList.add("hidden");$("chatSearchInput").value="";await loadChatList();};
+$("profileTab").onclick=async()=>{showPage("myProfilePage");await loadMyProfile();};
+$("notificationTab").onclick=()=>{showPage("notificationPage");renderNotifications();};
+$("logoutBtn").onclick=async()=>{
+ try{clearFeedListeners();clearProfilePostListeners();if(stopChatMessages){stopChatMessages();stopChatMessages=null;}if(stopChatMeta){stopChatMeta();stopChatMeta=null;}if(stopNotifications){stopNotifications();stopNotifications=null;}if(stopMyFollowCounts){stopMyFollowCounts();stopMyFollowCounts=null;}if(stopOtherFollowCounts){stopOtherFollowCounts();stopOtherFollowCounts=null;}await signOut(auth);}
+ catch(error){message("Logout error: "+error.message,"#ffb4b4");}
+};
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+ $("adminTab").classList.toggle("hidden", !user || !isAdmin());
+ if(!user){
+  myProfile=null;clearFeedListeners();clearProfilePostListeners();
+  if(stopChatMessages){stopChatMessages();stopChatMessages=null;}
+  if(stopChatMeta){stopChatMeta();stopChatMeta=null;}
+  activeChatId=null;activeChatPeer=null;
+  if(stopNotifications){stopNotifications();stopNotifications=null;}
+  if(stopMyFollowCounts){stopMyFollowCounts();stopMyFollowCounts=null;}
+  if(stopOtherFollowCounts){stopOtherFollowCounts();stopOtherFollowCounts=null;}
+  showSection("authSection");return;
+ }
+ try{
+  if(!isAdmin()){
+   const controlSnap=await getDoc(doc(db,"accountControls",user.uid));
+   if(controlSnap.exists() && controlSnap.data().status === "suspended"){
+    message("This KeepMe account is suspended. Please contact the app administrator.","#ffb4b4");
+    await signOut(auth);showSection("authSection");return;
+   }
+  }
+  const ok=await loadMyProfile();
+  if(ok){showSection("mainApp");showPage("feedPage");openFeed();startNotifications();startMyFollowCounts();startPresence();loadPostDraft();checkBirthdayReminder();const qrUser=new URLSearchParams(location.search).get("user");if(qrUser&&qrUser!==currentUser.uid)openOtherProfile(qrUser);}
+ }catch(error){console.error(error);message("Profile loading error: "+(error.code||error.message),"#ffb4b4");}
+});
+
+// KEEPMe EXTRA FEATURES: drafts, presence, birthday reminder, sounds and profile QR
+function savePostDraft(){
+ const text=$("postText").value.trim();if(!text){$("draftStatus").textContent="Write something before saving a draft.";return;}
+ localStorage.setItem("keepmeDraft_"+currentUser.uid,text);$("draftStatus").textContent="Draft saved on this device.";
+}
+function loadPostDraft(){const text=localStorage.getItem("keepmeDraft_"+currentUser.uid)||"";$("postText").value=text;$("draftStatus").textContent=text?"Draft loaded.":"No saved draft found.";}
+function clearPostDraft(){localStorage.removeItem("keepmeDraft_"+currentUser.uid);$("postText").value="";$("draftStatus").textContent="Draft cleared.";}
+const draftMenuToggle=$("draftMenuToggle"),draftMenu=$("draftMenu");
+function closeDraftMenu(){draftMenu.classList.add("hidden");draftMenuToggle.setAttribute("aria-expanded","false");}
+draftMenuToggle.addEventListener("click",()=>{
+ const opening=draftMenu.classList.contains("hidden");
+ draftMenu.classList.toggle("hidden");
+ draftMenuToggle.setAttribute("aria-expanded",String(opening));
+});
+$("saveDraftBtn").addEventListener("click",()=>{savePostDraft();closeDraftMenu();});
+$("loadDraftBtn").addEventListener("click",()=>{loadPostDraft();closeDraftMenu();});
+$("clearDraftBtn").addEventListener("click",()=>{if(confirm("Clear your saved draft?"))clearPostDraft();closeDraftMenu();});
+document.addEventListener("click",event=>{
+ if(!event.target.closest(".draft-menu-wrap"))closeDraftMenu();
+});
+let audioContext=null;
+async function playKeepMeSound(kind){
+ if(!kind||kind==="off")return;
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx){alert("এই ব্রাউজারে অডিও সাপোর্ট নেই। Chrome-এ খুলে চেষ্টা করুন।");return;}
+  audioContext=audioContext||new AudioCtx();
+  if(audioContext.state!=="running")await audioContext.resume();
+  const now=audioContext.currentTime;
+  const notes=kind==="chime"?[660,880]:kind==="pop"?[520]:[440,554];
+  notes.forEach((hz,i)=>{
+   const osc=audioContext.createOscillator(),gain=audioContext.createGain(),start=now+i*.14;
+   osc.type=kind==="pop"?"triangle":"sine";
+   osc.frequency.setValueAtTime(hz,start);
+   gain.gain.setValueAtTime(0.0001,start);
+   gain.gain.linearRampToValueAtTime(.12,start+.035);
+   gain.gain.exponentialRampToValueAtTime(.0001,start+.30);
+   osc.connect(gain);gain.connect(audioContext.destination);
+   osc.start(start);osc.stop(start+.32);
+  });
+ }catch(e){
+  console.warn("Sound playback unavailable",e);
+  alert("সাউন্ড চালু হয়নি। ফোনের Media volume বাড়িয়ে Chrome-এ আবার চেষ্টা করুন।");
+ }
+}
+$("testNotificationSound").addEventListener("click",()=>playKeepMeSound($("notificationSound").value));
+$("testMessengerSound").addEventListener("click",()=>playKeepMeSound($("messengerSound").value));
+let knownNotificationIds=new Set(),knownMessageIds=new Set(),notificationsInitialized=false,messagesInitialized=false;
+async function setMyPresence(online){if(!currentUser)return;try{await setDoc(doc(db,"users",currentUser.uid),{presence:{online,lastSeen:serverTimestamp()}},{merge:true});}catch(e){console.warn("Presence update:",e.code||e.message);}}
+function startPresence(){setMyPresence(true);window.addEventListener("pagehide",()=>{if(currentUser){setDoc(doc(db,"users",currentUser.uid),{presence:{online:false,lastSeen:serverTimestamp()}},{merge:true}).catch(()=>{});}});}
+function showPresence(targetId,data){const el=$(targetId);if(!el)return;const p=data?.presence||{};el.textContent=p.online?"● Online":p.lastSeen?.toDate?"● Offline · Last seen "+p.lastSeen.toDate().toLocaleString():"● Status unavailable";el.style.color=p.online?"#22a06b":"";}
+$("showMyQr").onclick=()=>{if(!myProfile||!currentUser)return;const url=location.origin+location.pathname+"?user="+encodeURIComponent(currentUser.uid);$("myQrImage").src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(url);$("myQrText").textContent="Scan to open this KeepMe profile link.";$("myQrPanel").classList.toggle("hidden");};
+async function checkBirthdayReminder(){
+ if(!currentUser)return;try{const today=new Date(),md=String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+  if(myProfile?.birthdayMonthDay===md){const el=document.createElement("div");el.className="card";el.textContent="🎂 Happy Birthday, "+(myProfile.name||"KeepMe user")+"!";$("feedPage").prepend(el);}
+  const q=query(collection(db,"users"),where("birthdayMonthDay","==",md),limit(30)),snap=await getDocs(q);const friends=snap.docs.filter(d=>d.id!==currentUser.uid);if(friends.length){const el=document.createElement("div");el.className="card";el.textContent="🎉 Today is "+friends.map(d=>d.data().name||"a KeepMe user's") .join(", ")+" birthday!";$("feedPage").prepend(el);}
+ }catch(e){console.warn("Birthday reminder unavailable:",e.code||e.message);}
+}
+
+// POSTS, COMMENTS AND NOTIFICATIONS
+$("publishBtn").onclick=async()=>{
+ const text=$("postText").value.trim();if(!text){message("Write something first.","#ffb4b4");return;}if(!myProfile)return;
+ const btn=$("publishBtn");btn.disabled=true;btn.textContent="Publishing...";
+ try{await addDoc(collection(db,"posts"),{uid:currentUser.uid,name:myProfile.name,username:myProfile.username,avatar:myProfile.avatar,text,createdAt:serverTimestamp()});$("postText").value="";localStorage.removeItem("keepmeDraft_"+currentUser.uid);$("draftStatus").textContent="";message("Post published!","#9cffb0");}
+ catch(error){console.error(error);message("Post error: "+error.code,"#ffb4b4");}
+ finally{btn.disabled=false;btn.textContent="Publish Post";}
+};
+async function createNotification(receiverId,type,postId=""){
+ if(!receiverId||receiverId===currentUser.uid)return;
+ await addDoc(collection(db,"notifications"),{receiverId,senderId:currentUser.uid,senderName:myProfile.name,senderUsername:myProfile.username,type,postId,read:false,createdAt:serverTimestamp()});
+}
+async function editPost(postId,oldText){
+ const nextText=prompt("Edit your post:",oldText||"");
+ if(nextText===null)return;
+ const text=nextText.trim();
+ if(!text){message("Post cannot be empty.","#ffb4b4");return;}
+ if(text.length>1000){message("Post must be 1000 characters or less.","#ffb4b4");return;}
+ try{
+  await updateDoc(doc(db,"posts",postId),{text,editedAt:serverTimestamp()});
+  message("Post updated!","#9cffb0");
+ }catch(error){
+  console.error("Edit post error:",error);
+  message("Edit error: "+(error.code||error.message),"#ffb4b4");
+ }
+}
+async function deletePost(postId){if(!confirm("Delete this post?"))return;try{await deleteDoc(doc(db,"posts",postId));message("Post deleted.","#9cffb0");}catch(error){message("Delete error: "+error.code,"#ffb4b4");}}
+async function setPostReaction(postId,reaction,postOwner,currentReaction){
+ const likeRef=doc(db,"posts",postId,"likes",currentUser.uid);
+ try{
+  if(currentReaction===reaction){await deleteDoc(likeRef);}
+  else{
+   await setDoc(likeRef,{uid:currentUser.uid,reaction,createdAt:serverTimestamp()},{merge:true});
+   if(!currentReaction && postOwner!==currentUser.uid){try{await createNotification(postOwner,"like",postId);}catch(e){console.error("Reaction notification:",e);}}
+  }
+ }catch(error){console.error(error);message("Reaction error: "+error.code,"#ffb4b4");}
+}
+async function sharePost(postId,postText){
+ const shareUrl=location.href.split("#")[0]+"#post-"+postId;
+ const payload={title:"KeepMe post",text:(postText||"Check out this post on KeepMe").slice(0,180),url:shareUrl};
+ try{if(navigator.share){await navigator.share(payload);}else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(shareUrl);message("Post link copied!","#9cffb0");}else{window.prompt("Copy this post link:",shareUrl);}}
+ catch(error){if(error.name!=="AbortError")message("Could not share this post.","#ffb4b4");}
+}
+async function addComment(postId,inputId,postOwner){
+ const input=$(inputId),text=input.value.trim();if(!text)return;
+ try{await addDoc(collection(db,"posts",postId,"comments"),{uid:currentUser.uid,name:myProfile.name,username:myProfile.username,text,createdAt:serverTimestamp()});input.value="";try{await createNotification(postOwner,"comment",postId);}catch(e){console.error("Comment notification:",e);}}
+ catch(error){console.error(error);message("Comment error: "+error.code,"#ffb4b4");}
+}
+function clearFeedListeners(){
+ if(stopFeed){stopFeed();stopFeed=null;}
+ Object.values(stopLikes).forEach(fn=>fn());Object.values(stopComments).forEach(fn=>fn());Object.values(stopShares).forEach(fn=>fn());stopLikes={};stopComments={};stopShares={};
+}
+async function toggleSavePost(postId,isSaved,button){
+ const ref=doc(db,"users",currentUser.uid,"savedPosts",postId);
+ button.disabled=true;
+ try{
+  if(isSaved){
+   await deleteDoc(ref);
+   button.textContent="🔖 Save";
+   button.classList.remove("saved-active");
+   button.dataset.saved="false";
+   message("Post removed from Saved Posts.","#9cffb0");
+  }else{
+   await setDoc(ref,{postId,createdAt:serverTimestamp()});
+   button.textContent="🔖 Saved";
+   button.classList.add("saved-active");
+   button.dataset.saved="true";
+   message("Post saved!","#9cffb0");
+  }
+ }catch(error){
+  console.error("Save post error:",error);
+  message("Save error: "+(error.code||error.message),"#ffb4b4");
+ }finally{button.disabled=false;}
+}
+async function loadSavedPosts(){
+ const list=$("savedPostsList");list.textContent="Loading saved posts...";
+ try{
+  const savedSnap=await getDocs(query(collection(db,"users",currentUser.uid,"savedPosts"),orderBy("createdAt","desc"),limit(100)));
+  list.innerHTML="";
+  if(savedSnap.empty){list.textContent="You haven't saved any posts yet.";return;}
+  for(const savedDoc of savedSnap.docs){
+   const postSnap=await getDoc(doc(db,"posts",savedDoc.id));
+   if(!postSnap.exists()){
+    const staleRef=doc(db,"users",currentUser.uid,"savedPosts",savedDoc.id);
+    await deleteDoc(staleRef);
+    continue;
+   }
+   const post=postSnap.data(),card=document.createElement("div");card.className="card";
+   const heading=document.createElement("div");heading.className="post-header";
+   const avatar=document.createElement("div");avatar.className="avatar-circle";avatar.textContent=avatars[post.avatar]||"👦🏻";
+   const identity=document.createElement("div");identity.style.flex="1";
+   const name=document.createElement("strong");name.textContent=post.name||"KeepMe User";
+   const username=document.createElement("div");username.className="feed-author-username";username.textContent="@"+(post.username||"user");
+   identity.append(name,username);heading.append(avatar,identity);
+   const content=document.createElement("p");content.className="post-text";content.textContent=post.text||"";
+   const remove=document.createElement("button");remove.textContent="🔖 Remove Saved";remove.onclick=async()=>{
+    remove.disabled=true;
+    try{await deleteDoc(doc(db,"users",currentUser.uid,"savedPosts",savedDoc.id));card.remove();if(!list.children.length)list.textContent="You haven't saved any posts yet.";}
+    catch(error){message("Unsave error: "+(error.code||error.message),"#ffb4b4");remove.disabled=false;}
+   };
+   card.append(heading,content,remove);list.append(card);
+  }
+  if(!list.children.length)list.textContent="You haven't saved any posts yet.";
+ }catch(error){
+  console.error("Load saved posts error:",error);
+  list.textContent="Could not load saved posts: "+(error.code||error.message);
+ }
+}
+
+function openFeed(){
+ clearFeedListeners();
+ const q=query(collection(db,"posts"),orderBy("createdAt","desc"),limit(50));
+ stopFeed=onSnapshot(q,snapshot=>{
+  $("feedList").innerHTML="";
+  if(snapshot.empty){$("feedList").textContent="No posts yet.";return;}
+  snapshot.forEach(postDoc=>{
+   const post=postDoc.data(),postId=postDoc.id,card=document.createElement("div");card.className="card";
+   const header=document.createElement("div");header.className="post-header";
+   const avatar=document.createElement("div");avatar.className="avatar-circle";avatar.textContent=avatars[post.avatar]||"👦🏻";
+   const identity=document.createElement("div");identity.style.flex="1";
+   const name=document.createElement("div");name.className="feed-author-name";name.textContent=post.name||"KeepMe User";
+   const username=document.createElement("div");username.className="feed-author-username";username.textContent="@"+(post.username||"user");
+   identity.append(name,username);header.append(avatar,identity);
+   const date=document.createElement("div");date.className="post-date";date.textContent=post.createdAt?.toDate?post.createdAt.toDate().toLocaleString():"Just now";header.append(date);
+   if(post.uid!==currentUser.uid){const profileBtn=document.createElement("button");profileBtn.textContent="View Profile";profileBtn.onclick=()=>openOtherProfile(post.uid);header.append(profileBtn);}
+   const postMenuWrap=document.createElement("div");postMenuWrap.className="post-menu-wrap";
+   const postMenuBtn=document.createElement("button");postMenuBtn.type="button";postMenuBtn.className="post-menu-btn";postMenuBtn.textContent="⋮";postMenuBtn.setAttribute("aria-label","Post options");
+   const postMenu=document.createElement("div");postMenu.className="post-menu hidden";
+   const menuSave=document.createElement("button");menuSave.type="button";menuSave.textContent="🔖 Save";
+   menuSave.onclick=()=>{saveBtn.click();postMenu.classList.add("hidden");};
+   postMenu.append(menuSave);
+   if(post.uid===currentUser.uid){
+    const menuEdit=document.createElement("button");menuEdit.type="button";menuEdit.textContent="✏️ Edit post";menuEdit.onclick=()=>{postMenu.classList.add("hidden");editPost(postId,post.text||"");};
+    const menuDelete=document.createElement("button");menuDelete.type="button";menuDelete.textContent="🗑 Delete post";menuDelete.onclick=()=>{postMenu.classList.add("hidden");deletePost(postId);};
+    postMenu.append(menuEdit,menuDelete);
+   }
+   postMenuBtn.onclick=e=>{e.stopPropagation();postMenu.classList.toggle("hidden");};
+   postMenuWrap.append(postMenuBtn,postMenu);header.append(postMenuWrap);
+   card.append(header);
+   const postText=document.createElement("div");postText.className="post-text";postText.textContent=post.text||"";card.append(postText);
+   if(post.uid!==currentUser.uid){const reportBtn=document.createElement("button");reportBtn.textContent="🚩 Report Post";reportBtn.style.marginTop="8px";reportBtn.onclick=()=>reportPost(postId,post.uid);card.append(reportBtn);}
+   const actions=document.createElement("div");actions.className="post-actions";
+   const reactionWrap=document.createElement("div");reactionWrap.className="reaction-wrap";
+   const likeBtn=document.createElement("button");likeBtn.className="icon-action";likeBtn.innerHTML='<span class="action-icon">♡</span><span class="action-count">0</span>';likeBtn.title="Tap to Like • Press and hold for reactions";likeBtn.setAttribute("aria-label","Like post");
+   const picker=document.createElement("div");picker.className="reaction-picker hidden";
+   const reactions=[{key:"love",emoji:"❤️",label:"Love"},{key:"haha",emoji:"😂",label:"Haha"},{key:"sad",emoji:"😢",label:"Sad"},{key:"angry",emoji:"😡",label:"Angry"}];
+   const reactionButtons={};let myReaction=null;let holdTimer=null;let longPressed=false;
+   reactions.forEach(item=>{const b=document.createElement("button");b.type="button";b.textContent=item.emoji;b.title=item.label;b.setAttribute("aria-label",item.label);b.onclick=(e)=>{e.stopPropagation();picker.classList.add("hidden");setPostReaction(postId,item.key,post.uid,myReaction);};reactionButtons[item.key]=b;picker.append(b);});
+   const openReactionPicker=()=>picker.classList.remove("hidden");
+   likeBtn.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;longPressed=false;holdTimer=setTimeout(()=>{longPressed=true;openReactionPicker();},450);});
+   ["pointerup","pointerleave","pointercancel"].forEach(ev=>likeBtn.addEventListener(ev,()=>{if(holdTimer){clearTimeout(holdTimer);holdTimer=null;}}));
+   likeBtn.addEventListener("contextmenu",e=>{e.preventDefault();longPressed=true;openReactionPicker();});
+   likeBtn.onclick=()=>{if(longPressed){longPressed=false;return;}picker.classList.add("hidden");setPostReaction(postId,"love",post.uid,myReaction);};
+   reactionWrap.append(likeBtn,picker);
+   const commentBtn=document.createElement("button");commentBtn.className="icon-action";commentBtn.innerHTML='<span class="action-icon">▢</span><span class="action-count">0</span>';commentBtn.title="Comments";commentBtn.setAttribute("aria-label","Show comments");
+   const shareBtn=document.createElement("button");shareBtn.className="icon-action";shareBtn.innerHTML='<span class="action-icon">↗</span><span class="action-count">0</span>';shareBtn.title="Share post";shareBtn.setAttribute("aria-label","Share post");shareBtn.onclick=async()=>{try{await setDoc(doc(db,"posts",postId,"shares",currentUser.uid),{uid:currentUser.uid,createdAt:serverTimestamp()},{merge:true});}catch(e){console.warn("Share count could not be saved:",e);}await sharePost(postId,post.text||"");};
+   const saveBtn=document.createElement("button");saveBtn.textContent="🔖 Checking...";saveBtn.disabled=true;
+   actions.append(reactionWrap,commentBtn,shareBtn);
+   saveBtn.style.display="none";
+   const savedRef=doc(db,"users",currentUser.uid,"savedPosts",postId);
+   getDoc(savedRef).then(savedSnap=>{
+    let isSaved=savedSnap.exists();
+    saveBtn.disabled=false;saveBtn.dataset.saved=isSaved?"true":"false";
+    saveBtn.textContent=isSaved?"🔖 Saved":"🔖 Save";
+    saveBtn.classList.toggle("saved-active",isSaved);
+    saveBtn.onclick=()=>toggleSavePost(postId,saveBtn.dataset.saved==="true",saveBtn);
+   }).catch(error=>{
+    console.error("Check saved state:",error);saveBtn.disabled=false;saveBtn.textContent="🔖 Save";
+    saveBtn.onclick=()=>toggleSavePost(postId,false,saveBtn);
+   });
+   card.append(actions);
+   const commentsArea=document.createElement("div");commentsArea.className="hidden";const commentsList=document.createElement("div");
+   const commentBox=document.createElement("div");commentBox.className="comment-box";
+   const commentInput=document.createElement("input");commentInput.placeholder="Write a comment...";commentInput.id="comment_"+postId;
+   const sendBtn=document.createElement("button");sendBtn.textContent="Send";sendBtn.onclick=()=>addComment(postId,commentInput.id,post.uid);
+   commentInput.addEventListener("keydown",e=>{if(e.key==="Enter")addComment(postId,commentInput.id,post.uid);});
+   commentBox.append(commentInput,sendBtn);commentsArea.append(commentsList,commentBox);card.append(commentsArea);
+   commentBtn.onclick=()=>commentsArea.classList.toggle("hidden");
+   const reactionSummary=document.createElement("div");reactionSummary.className="reaction-summary";card.append(reactionSummary);
+   stopLikes[postId]=onSnapshot(query(collection(db,"posts",postId,"likes")),likes=>{
+    myReaction=null;const counts={love:0,haha:0,sad:0,angry:0};
+    likes.forEach(l=>{const data=l.data(),kind=data.reaction||"love";if(counts[kind]!==undefined)counts[kind]++;if(l.id===currentUser.uid)myReaction=kind;});
+    const total=likes.size;const activeReaction=reactions.find(item=>item.key===myReaction);likeBtn.querySelector(".action-icon").textContent=activeReaction?activeReaction.emoji:"♡";likeBtn.querySelector(".action-count").textContent=String(total);likeBtn.classList.toggle("liked",!!myReaction);
+    reactionSummary.textContent=total?"❤️ "+counts.love+"   😂 "+counts.haha+"   😢 "+counts.sad+"   😡 "+counts.angry:"No reactions yet";
+    reactions.forEach(item=>{reactionButtons[item.key].style.outline=myReaction===item.key?"2px solid #7770df":"none";});
+   });
+   stopShares[postId]=onSnapshot(query(collection(db,"posts",postId,"shares")),shares=>{
+    shareBtn.querySelector(".action-count").textContent=String(shares.size);
+   },error=>{console.warn("Share count listener:",error);});
+   stopComments[postId]=onSnapshot(query(collection(db,"posts",postId,"comments"),orderBy("createdAt","asc"),limit(30)),comments=>{
+    commentsList.innerHTML="";
+    commentBtn.querySelector(".action-count").textContent=String(comments.size);
+    comments.forEach(commentDoc=>{
+     const c=commentDoc.data(),item=document.createElement("div");item.className="comment";
+     const strong=document.createElement("strong");strong.textContent=c.name||"User";
+     const small=document.createElement("small");small.textContent=" @"+(c.username||"user");
+     const content=document.createElement("div");content.textContent=c.text||"";item.append(strong,small,content);commentsList.append(item);
+    });
+   });
+   card.id="post-"+postId;$("feedList").append(card);
+  });
+ },error=>{console.error(error);message("Feed error: "+error.code,"#ffb4b4");});
+}
+
+function startNotifications(){
+ if(stopNotifications)stopNotifications();
+ const q=query(collection(db,"notifications"),where("receiverId","==",currentUser.uid),limit(50));
+ stopNotifications=onSnapshot(q,snapshot=>{
+  notificationCache=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+  snapshot.docChanges().forEach(change=>{if(notificationsInitialized&&change.type==="added"&&!knownNotificationIds.has(change.doc.id)){const n=change.doc.data();if(n.senderId&&n.senderId!==currentUser.uid)playKeepMeSound(localStorage.getItem("keepmeNotificationSound")||"chime");}});
+  snapshot.docs.forEach(d=>knownNotificationIds.add(d.id));notificationsInitialized=true;
+  notificationCache.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));renderNotifications();
+ },error=>{console.error(error);message("Notification error: "+error.code,"#ffb4b4");});
+}
+function notificationMessage(n){
+ const name=n.senderName||"Someone";
+ if(n.type==="follow")return `${name} started following you.`;
+ if(n.type==="like"||n.type==="reaction")return `${name} reacted to your post.`;
+ if(n.type==="comment")return `${name} commented on your post.`;
+ if(n.type==="friend_request")return `${name} sent you a friend request.`;
+ if(n.type==="friend_accept")return `${name} accepted your friend request.`;
+ return `${name} sent you a notification.`;
+}
+function notificationTime(date){
+ if(!date?.toDate)return "Just now";
+ const d=date.toDate(),seconds=Math.max(0,Math.floor((Date.now()-d.getTime())/1000));
+ if(seconds<60)return "Just now";
+ if(seconds<3600)return `${Math.floor(seconds/60)}m ago`;
+ if(seconds<86400)return `${Math.floor(seconds/3600)}h ago`;
+ if(seconds<604800)return `${Math.floor(seconds/86400)}d ago`;
+ return d.toLocaleDateString([], {month:"short",day:"numeric",year:d.getFullYear()!==new Date().getFullYear()?"numeric":undefined});
+}
+function renderNotifications(){
+ const list=$("notificationList");list.innerHTML="";
+ const unread=notificationCache.filter(n=>!n.read).length;
+ $("notificationBadge").textContent=unread?`(${unread})`:"";
+ $("notificationAllFilter").classList.toggle("active",notificationFilter==="all");
+ $("notificationUnreadFilter").classList.toggle("active",notificationFilter==="unread");
+ const visible=notificationCache.filter(n=>notificationFilter==="all"||!n.read);
+ if(visible.length===0){list.innerHTML='<div class="notification-empty"><div class="notification-empty-icon">🔔</div><strong>'+ (notificationFilter==="unread"?"You’re all caught up":"No notifications yet") +'</strong><div>When someone interacts with you, you’ll see it here.</div></div>';return;}
+ visible.forEach(n=>{
+  const item=document.createElement("div");item.className="notification-item"+(n.read?"":" unread");
+  const avatar=document.createElement("div");avatar.className="notification-avatar";avatar.textContent=n.senderAvatar||"👤";
+  const content=document.createElement("div");content.className="notification-content";
+  const messageText=document.createElement("div");messageText.textContent=notificationMessage(n);
+  const time=document.createElement("div");time.className="notification-time";time.textContent=notificationTime(n.createdAt);
+  content.append(messageText,time);item.append(avatar,content);
+  const actions=document.createElement("div");actions.className="notification-item-actions";
+  if(!n.read){const readBtn=document.createElement("button");readBtn.textContent="Mark read";readBtn.onclick=()=>markRead(n.id);actions.append(readBtn);}
+  const deleteBtn=document.createElement("button");deleteBtn.className="notification-delete";deleteBtn.textContent="✕";deleteBtn.title="Delete notification";deleteBtn.onclick=()=>deleteNotification(n.id);actions.append(deleteBtn);item.append(actions);
+  if(!n.read){const dot=document.createElement("span");dot.className="notification-unread-dot";dot.title="Unread";item.append(dot);}
+  list.append(item);
+ });
+}
+$("notificationAllFilter").onclick=()=>{notificationFilter="all";renderNotifications();};
+$("notificationUnreadFilter").onclick=()=>{notificationFilter="unread";renderNotifications();};
+async function markRead(id){try{await updateDoc(doc(db,"notifications",id),{read:true});}catch(error){message("Mark read error: "+error.code,"#ffb4b4");}}
+$("markAllRead").onclick=async()=>{
+ try{const batch=writeBatch(db);notificationCache.filter(n=>!n.read).forEach(n=>batch.update(doc(db,"notifications",n.id),{read:true}));await batch.commit();}
+ catch(error){message("Error: "+error.code,"#ffb4b4");}
+};
+async function deleteNotification(id){try{await deleteDoc(doc(db,"notifications",id));}catch(error){message("Delete error: "+error.code,"#ffb4b4");}}
+
+// FOLLOW SYSTEM
+async function followUser(targetId){
+ if(!targetId||targetId===currentUser.uid)return;
+ const followerRef=doc(db,"users",targetId,"followers",currentUser.uid),followingRef=doc(db,"users",currentUser.uid,"following",targetId);
+ try{
+  const existing=await getDoc(followerRef);if(existing.exists()){message("Already following this user.");return;}
+  const batch=writeBatch(db);
+  batch.set(followerRef,{uid:currentUser.uid,createdAt:serverTimestamp()});
+  batch.set(followingRef,{uid:targetId,createdAt:serverTimestamp()});await batch.commit();
+  try{await createNotification(targetId,"follow");}catch(error){console.error("Follow notification:",error);}
+  message("Followed successfully!","#9cffb0");
+ }catch(error){console.error(error);message("Follow error: "+error.code,"#ffb4b4");}
+}
+async function unfollowUser(targetId){
+ if(!targetId||targetId===currentUser.uid)return;
+ try{const batch=writeBatch(db);batch.delete(doc(db,"users",targetId,"followers",currentUser.uid));batch.delete(doc(db,"users",currentUser.uid,"following",targetId));await batch.commit();message("Unfollowed successfully.","#9cffb0");}
+ catch(error){console.error(error);message("Unfollow error: "+error.code,"#ffb4b4");}
+}
+async function checkFollow(targetId){
+ const snap=await getDoc(doc(db,"users",targetId,"followers",currentUser.uid)),btn=$("followUserBtn");
+ if(snap.exists()){btn.textContent="Following";btn.classList.add("following");}
+ else{btn.textContent="Follow";btn.classList.remove("following");}
+}
+$("followUserBtn").onclick=async()=>{
+ if(!viewingUser)return;
+ const snap=await getDoc(doc(db,"users",viewingUser.uid,"followers",currentUser.uid));
+ if(snap.exists())await unfollowUser(viewingUser.uid);else await followUser(viewingUser.uid);
+ await checkFollow(viewingUser.uid);
+};
+function startMyFollowCounts(){
+ if(stopMyFollowCounts)stopMyFollowCounts();
+ let followerCount=0,followingCount=0;
+ const stop1=onSnapshot(query(collection(db,"users",currentUser.uid,"followers")),snap=>{$("myFollowers").textContent=followerCount=snap.size;});
+ const stop2=onSnapshot(query(collection(db,"users",currentUser.uid,"following")),snap=>{$("myFollowing").textContent=followingCount=snap.size;});
+ stopMyFollowCounts=()=>{stop1();stop2();};
+}
+function startOtherFollowCounts(targetId){
+ if(stopOtherFollowCounts)stopOtherFollowCounts();
+ const stop1=onSnapshot(collection(db,"users",targetId,"followers"),snap=>{$("otherFollowers").textContent=snap.size;});
+ const stop2=onSnapshot(collection(db,"users",targetId,"following"),snap=>{$("otherFollowing").textContent=snap.size;});
+ stopOtherFollowCounts=()=>{stop1();stop2();};
+}
+
+async function searchUsers(){
+ const term=$("userSearchInput").value.trim().replace(/^@/,"").toLowerCase();
+ const results=$("userSearchResults"),status=$("userSearchStatus"),btn=$("userSearchBtn");
+ results.innerHTML="";
+ if(term.length<2){status.textContent="Enter at least 2 characters.";return;}
+ if(!/^[a-z0-9_]+$/.test(term)){status.textContent="Use only letters, numbers and underscore.";return;}
+ btn.disabled=true;btn.textContent="Searching...";status.textContent="Searching users...";
+ try{
+  const usersQuery=query(
+   collection(db,"users"),
+   where("username",">=",term),
+   where("username","<=",term+"\uf8ff"),
+   limit(20)
+  );
+  const snap=await getDocs(usersQuery);
+  const matches=snap.docs.filter(d=>d.id!==currentUser.uid);
+  results.innerHTML="";
+  if(matches.length===0){status.textContent="No users found. Check the username and try again.";return;}
+  status.textContent=matches.length+" user(s) found.";
+  matches.forEach(userDoc=>{
+   const u=userDoc.data(),row=document.createElement("div");row.className="user-item";
+   const avatar=document.createElement("div");avatar.className="avatar-circle";avatar.textContent=avatars[u.avatar]||"👦🏻";
+   const info=document.createElement("div");info.className="user-info";
+   const name=document.createElement("strong");name.textContent=u.name||"User";
+   const username=document.createElement("div");username.className="username";username.textContent="@"+(u.username||"");
+   info.append(name,username);
+   const view=document.createElement("button");view.textContent="View Profile";
+   view.onclick=()=>openOtherProfile(userDoc.id);
+   row.append(avatar,info,view);results.append(row);
+  });
+ }catch(error){
+  console.error("User search error:",error);
+  status.textContent="Search error: "+(error.code||error.message);
+ }finally{btn.disabled=false;btn.textContent="Search Users";}
+}
+$("userSearchBtn").onclick=searchUsers;
+$("userSearchInput").addEventListener("keydown",event=>{if(event.key==="Enter")searchUsers();});
+
+
+// REPORT SYSTEM
+const reportReasons=["Spam or unwanted promotion","Harassment or bullying","Fake or impersonation account","Inappropriate content","Scam or misleading activity","Other"];
+async function submitReport(targetType,targetId,targetOwnerId){
+ if(!currentUser){message("Please sign in first.");return;}
+ if(!targetId||!targetOwnerId||targetOwnerId===currentUser.uid){message("You cannot report your own content.");return;}
+ const choice=prompt("Choose a report reason by number:\n"+reportReasons.map((r,i)=>(i+1)+". "+r).join("\n"));
+ if(choice===null)return;
+ const index=Number(choice.trim())-1;
+ if(!Number.isInteger(index)||index<0||index>=reportReasons.length){message("Invalid reason. Please try again.");return;}
+ const details=prompt("Additional details (optional). Do not include passwords or private information:")||"";
+ try{
+  await addDoc(collection(db,"reports"),{reporterId:currentUser.uid,targetType,targetId,targetOwnerId,reason:reportReasons[index],details:details.trim().slice(0,500),status:"pending",createdAt:serverTimestamp()});
+  message("Report submitted. Thank you for helping keep KeepMe safe.","#16834a");
+ }catch(error){console.error("Report submit error:",error);message("Report error: "+(error.code||error.message),"#c13e58");}
+}
+async function reportUser(){if(viewingUser)await submitReport("user",viewingUser.uid,viewingUser.uid);}
+async function reportPost(postId,ownerId){await submitReport("post",postId,ownerId);}
+function isAdmin(){return !!currentUser && ADMIN_UID !== "PASTE_YOUR_ADMIN_UID_HERE" && currentUser.uid === ADMIN_UID;}
+async function loadAdminReports(){
+ if(!isAdmin()){message("Admin access denied.");showPage("feedPage");return;}
+ const box=$("adminReports"),status=$("adminReportStatus");box.innerHTML="";status.textContent="Loading reports...";
+ try{
+  const snap=await getDocs(collection(db,"reports"));
+  const docs=snap.docs.slice().sort((a,b)=>{
+   const av=a.data().createdAt?.toMillis?.()||0,bv=b.data().createdAt?.toMillis?.()||0;return bv-av;
+  });
+  status.textContent=docs.length+" report(s) found.";
+  if(!docs.length){box.textContent="No reports yet.";return;}
+  docs.forEach(reportDoc=>{
+   const r=reportDoc.data(),card=document.createElement("div");card.className="notification-item";
+   const heading=document.createElement("strong");heading.textContent=(r.targetType||"Report").toUpperCase()+" • "+(r.reason||"No reason");
+   const info=document.createElement("p");info.textContent="Target ID: "+(r.targetId||"-")+" | Owner UID: "+(r.targetOwnerId||"-");
+   const details=document.createElement("p");details.textContent="Details: "+(r.details||"None");
+   const reporter=document.createElement("p");reporter.textContent="Reporter UID: "+(r.reporterId||"-");
+   const state=document.createElement("p");state.textContent="Status: "+(r.status||"pending");
+   const select=document.createElement("select");select.style.cssText="width:100%;padding:11px;border-radius:9px;margin:8px 0;background:#f4f5fb;color:#26324d";
+   [["pending","Pending"],["reviewed","Reviewed"],["action_taken","Action taken"],["dismissed","Dismissed"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;select.append(o);});select.value=r.status||"pending";
+   const note=document.createElement("textarea");note.placeholder="Private admin note (optional)";note.value=r.adminNote||"";
+   const save=document.createElement("button");save.textContent="Save decision";save.className="full";
+   save.onclick=async()=>{save.disabled=true;try{await updateDoc(doc(db,"reports",reportDoc.id),{status:select.value,adminNote:note.value.trim().slice(0,500)});state.textContent="Status: "+select.value;message("Report updated.");}catch(e){message("Update failed: "+(e.code||e.message));}finally{save.disabled=false;}};
+   card.append(heading,info,details,reporter,state,select,note,save);box.append(card);
+  });
+ }catch(error){console.error(error);status.textContent="Could not load reports: "+(error.code||error.message);}
+}
+$("adminTab").onclick=async()=>{if(!isAdmin()){message("Admin access denied.");return;}showPage("adminPage");await loadAdminReports();await loadAdminUsers();};
+$("refreshReports").onclick=loadAdminReports;
+async function loadAdminUsers(){
+ if(!isAdmin()){message("Admin access denied.");return;}
+ const box=$("adminUsers"),status=$("adminUserStatus");box.innerHTML="";status.textContent="Loading users...";
+ try{
+  const snap=await getDocs(query(collection(db,"users"),limit(100)));
+  const users=snap.docs.slice().sort((a,b)=>(a.data().name||a.data().username||"").localeCompare(b.data().name||b.data().username||""));
+  status.textContent=users.length+" profile(s) loaded (maximum 100 per refresh).";
+  if(!users.length){box.textContent="No user profiles found.";return;}
+  for(const userDoc of users){
+   const uid=userDoc.id,u=userDoc.data();if(uid===ADMIN_UID)continue;
+   const controlSnap=await getDoc(doc(db,"accountControls",uid));
+   const currentStatus=controlSnap.exists()?controlSnap.data().status:"active";
+   const card=document.createElement("div");card.className="notification-item";
+   const title=document.createElement("strong");title.textContent=(u.name||"Unnamed user")+(u.username?" (@"+u.username+")":"");
+   const uidText=document.createElement("p");uidText.textContent="UID: "+uid;
+   const state=document.createElement("p");state.textContent="Account status: "+currentStatus;
+   const action=document.createElement("button");action.className="full";action.textContent=currentStatus==="suspended"?"Reactivate Account":"Suspend Account";
+   action.onclick=async()=>{
+    const suspend=currentStatus!=="suspended";
+    const ok=confirm(suspend?"Suspend this KeepMe account? The user will be signed out when the app checks account status.":"Reactivate this KeepMe account?");
+    if(!ok)return;action.disabled=true;
+    try{
+     await setDoc(doc(db,"accountControls",uid),{status:suspend?"suspended":"active",updatedAt:serverTimestamp(),updatedBy:currentUser.uid});
+     state.textContent="Account status: "+(suspend?"suspended":"active");action.textContent=suspend?"Reactivate Account":"Suspend Account";
+     // Update the closure's status for repeated toggles by replacing the button handler on next refresh.
+     action.onclick=()=>{message("Refresh Users to change this account again.");};
+     message(suspend?"Account suspended in KeepMe.":"Account reactivated.");
+    }catch(e){message("User update failed: "+(e.code||e.message));}
+    finally{action.disabled=false;}
+   };
+   card.append(title,uidText,state,action);box.append(card);
+  }
+ }catch(error){console.error(error);status.textContent="Could not load users: "+(error.code||error.message);}
+}
+$("refreshUsers").onclick=loadAdminUsers;
+$("reportUserBtn").onclick=reportUser;
+
+// BLOCK + PRIVATE CHAT
+function makeChatId(uidA,uidB){
+ return [uidA,uidB].sort().join("_");
+}
+async function hasBlockedUser(otherUid){
+ const blockedSnap=await getDoc(doc(db,"users",currentUser.uid,"blocked",otherUid));
+ return blockedSnap.exists();
+}
+async function setBlockButtonState(otherUid){
+ const blocked=await hasBlockedUser(otherUid);
+ $("blockUserBtn").textContent=blocked?"Unblock":"Block";
+ $("messageUserBtn").disabled=blocked;
+}
+async function toggleBlockUser(){
+ if(!viewingUser||!currentUser||viewingUser.uid===currentUser.uid)return;
+ const otherUid=viewingUser.uid;
+ const blockRef=doc(db,"users",currentUser.uid,"blocked",otherUid);
+ try{
+  const blockSnap=await getDoc(blockRef);
+  if(blockSnap.exists()){
+   await deleteDoc(blockRef);
+   $("blockUserBtn").textContent="Block";
+   $("messageUserBtn").disabled=false;
+   message("User unblocked.","#9cffb0");
+  }else{
+   const yes=confirm("Block this user? You will not be able to send messages to each other.");
+   if(!yes)return;
+   await setDoc(blockRef,{uid:otherUid,createdAt:serverTimestamp()});
+   $("blockUserBtn").textContent="Unblock";
+   $("messageUserBtn").disabled=true;
+   message("User blocked. Chat is now disabled.","#9cffb0");
+  }
+ }catch(error){
+  console.error("Block error:",error);
+  message("Block error: "+(error.code||error.message),"#ffb4b4");
+ }
+}
+async function openChatWith(otherUid){
+ if(!currentUser||!otherUid||otherUid===currentUser.uid)return;
+ try{
+  if(await hasBlockedUser(otherUid)){
+   message("You blocked this user. Unblock them to start a chat.","#ffb4b4");
+   return;
+  }
+  const peerSnap=await getDoc(doc(db,"users",otherUid));
+  if(!peerSnap.exists()){message("User profile not found.");return;}
+  const peerData=peerSnap.data();
+  if(!(await canMessageUser(otherUid,peerData))){message("This user only accepts messages from people they follow.","#ffb4b4");return;}
+  const chatId=makeChatId(currentUser.uid,otherUid);
+  const chatRef=doc(db,"chats",chatId);
+  const chatSnap=await getDoc(chatRef);
+  if(!chatSnap.exists()){
+   await setDoc(chatRef,{
+    members:[currentUser.uid,otherUid].sort(),
+    createdAt:serverTimestamp(),
+    lastMessage:"",
+    lastAt:serverTimestamp()
+   });
+  }
+  activeChatId=chatId;
+  activeChatPeer={uid:otherUid,...peerData};
+  showPage("chatPage");
+  $("chatListCard").classList.add("hidden");
+  $("conversationCard").classList.remove("hidden");
+  $("conversationTitle").textContent=peerData.name||"KeepMe User";
+  $("conversationUsername").textContent="@"+(peerData.username||"keepme_user");
+  $("conversationAvatar").textContent=avatars[peerData.avatar]||"👦🏻";
+  $("chatMessageInput").value="";
+  watchChatMessages(chatId);watchChatMeta(chatId);
+ }catch(error){
+  console.error("Open chat error:",error);
+  const code=error.code||error.message||"unknown-error";
+  message("Chat could not open: "+code+". Check Firestore Rules and try again.","#ffb4b4");
+ }
+}
+function clearReply(){replyTarget=null;$("replyPreview").classList.add("hidden");$("replyPreviewText").textContent="";}
+function watchChatMeta(chatId){
+ if(stopChatMeta){stopChatMeta();stopChatMeta=null;}
+ stopChatMeta=onSnapshot(doc(db,"chats",chatId),snap=>{
+  const data=snap.data()||{},typing=data.typing||{};
+  $("typingIndicator").textContent=typing[activeChatPeer?.uid]?((activeChatPeer?.name||"User")+" is typing..."):"";
+ });
+}
+function watchChatMessages(chatId){
+ if(stopChatMessages){stopChatMessages();stopChatMessages=null;}
+ const messagesBox=$("chatMessages");messagesBox.textContent="Loading messages...";
+ const messagesQuery=query(collection(db,"chats",chatId,"messages"),orderBy("createdAt","asc"),limit(100));
+ stopChatMessages=onSnapshot(messagesQuery,async snapshot=>{
+  messagesBox.innerHTML="";
+  if(snapshot.empty){const empty=document.createElement("p");empty.className="hint";empty.textContent="No messages yet. Say hello!";messagesBox.append(empty);}
+  const updates=[];
+  snapshot.docChanges().forEach(change=>{if(messagesInitialized&&change.type==="added"&&!knownMessageIds.has(change.doc.id)){const m=change.doc.data();if(m.senderId!==currentUser.uid)playKeepMeSound(localStorage.getItem("keepmeMessengerSound")||"pop");}});
+  snapshot.docs.forEach(d=>knownMessageIds.add(d.id));messagesInitialized=true;
+  snapshot.forEach(messageDoc=>{
+   const data=messageDoc.data();
+   if(data.senderId!==currentUser.uid&&!data.seenAt){updates.push(updateDoc(doc(db,"chats",chatId,"messages",messageDoc.id),{deliveredAt:data.deliveredAt||serverTimestamp(),seenAt:serverTimestamp()}).catch(e=>console.warn("Read receipt update:",e.code)));}
+   const bubble=document.createElement("div");bubble.className="chat-bubble "+(data.senderId===currentUser.uid?"outgoing":"incoming");
+   if(data.replyText){const reply=document.createElement("div");reply.className="reply-to";reply.textContent="↪ "+data.replyText.slice(0,100);bubble.append(reply);}
+   const body=document.createElement("div");body.textContent=data.text||"";bubble.append(body);
+   const stamp=document.createElement("small");stamp.className="chat-bubble-time";
+   const time=data.createdAt?.toDate?data.createdAt.toDate().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}):"Sending...";
+   let status="";if(data.senderId===currentUser.uid)status=data.seenAt?" · Seen":data.deliveredAt?" · Delivered":" · Sent";
+   stamp.textContent=time+status;bubble.append(stamp);
+   const replyBtn=document.createElement("button");replyBtn.type="button";replyBtn.className="chat-reply-btn";replyBtn.textContent="Reply";
+   replyBtn.onclick=()=>{replyTarget={id:messageDoc.id,text:data.text||""};$("replyPreviewText").textContent="Replying to: "+(data.text||"").slice(0,100);$("replyPreview").classList.remove("hidden");$("chatMessageInput").focus();};
+   bubble.append(replyBtn);messagesBox.append(bubble);
+  });
+  if(updates.length)await Promise.all(updates);
+  messagesBox.scrollTop=messagesBox.scrollHeight;
+ },error=>{console.error("Chat listener error:",error);messagesBox.textContent="Could not load messages: "+(error.code||error.message);});
+}
+async function sendChatMessage(){
+ const text=$("chatMessageInput").value.trim();
+ if(!text||!activeChatId||!activeChatPeer)return;
+ if(text.length>1000){message("Message must be 1000 characters or less.");return;}
+ const sendButton=$("sendChatMessage");
+ sendButton.disabled=true;
+ try{
+  if(await hasBlockedUser(activeChatPeer.uid)){
+   message("You blocked this user. Unblock them to send messages.","#ffb4b4");
+   return;
+  }
+  await addDoc(collection(db,"chats",activeChatId,"messages"),{
+   senderId:currentUser.uid,
+   text,
+   createdAt:serverTimestamp(),
+   replyTo:replyTarget?.id||null,
+   replyText:replyTarget?.text||""
+  });
+  await updateDoc(doc(db,"chats",activeChatId),{lastMessage:text.slice(0,100),lastAt:serverTimestamp(),["typing."+currentUser.uid]:false});
+  $("chatMessageInput").value="";clearReply();
+ }catch(error){
+  console.error("Send message error:",error);
+  message("Send error: "+(error.code||error.message),"#ffb4b4");
+ }finally{
+  sendButton.disabled=false;
+ }
+}
+function formatChatListTime(timestamp){
+ if(!timestamp||!timestamp.toDate)return "";
+ const date=timestamp.toDate(),now=new Date();
+ const sameDay=date.toDateString()===now.toDateString();
+ const yesterday=new Date(now);yesterday.setDate(now.getDate()-1);
+ if(sameDay)return date.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+ if(date.toDateString()===yesterday.toDateString())return "Yesterday";
+ return date.toLocaleDateString([], {day:"numeric",month:"short"});
+}
+async function loadChatList(){
+ const list=$("chatList");
+ list.innerHTML="";
+ list.textContent="Loading chats...";
+ try{
+  const chatsQuery=query(
+   collection(db,"chats"),
+   where("members","array-contains",currentUser.uid),
+   limit(50)
+  );
+  const snapshot=await getDocs(chatsQuery);
+  list.innerHTML="";
+  const chatDocs=snapshot.docs.sort((a,b)=>{
+   const at=a.data().lastAt?.toMillis?.()||0;
+   const bt=b.data().lastAt?.toMillis?.()||0;
+   return bt-at;
+  });
+  if(chatDocs.length===0){
+   const empty=document.createElement("div");empty.className="chat-empty";
+   empty.textContent="No messages yet. Visit someone's profile and tap Message to start a conversation.";
+   list.append(empty);return;
+  }
+  for(const chatDoc of chatDocs){
+   const chatData=chatDoc.data();
+   const peerUid=(chatData.members||[]).find(uid=>uid!==currentUser.uid);
+   if(!peerUid)continue;
+   // Only show conversations after a message has been sent, like a Messenger inbox.
+   if(!String(chatData.lastMessage||"").trim())continue;
+   if(await hasBlockedUser(peerUid))continue;
+   const peerSnap=await getDoc(doc(db,"users",peerUid));
+   if(!peerSnap.exists())continue;
+   const peer=peerSnap.data();
+
+   const row=document.createElement("div");
+   row.className="chat-row";
+   const avatarBtn=document.createElement("button");
+   avatarBtn.type="button";avatarBtn.className="chat-avatar-btn";
+   avatarBtn.textContent=avatars[peer.avatar]||"👦🏻";
+   avatarBtn.setAttribute("aria-label","View "+(peer.name||"user")+" profile");
+   avatarBtn.onclick=()=>openOtherProfile(peerUid);
+
+   const openButton=document.createElement("button");
+   openButton.type="button";openButton.className="chat-row-main";
+   openButton.onclick=()=>openChatWith(peerUid);
+   const top=document.createElement("div");top.className="chat-row-top";
+   const name=document.createElement("span");name.className="chat-row-name";name.textContent=peer.name||"KeepMe User";
+   const time=document.createElement("span");time.className="chat-row-time";time.textContent=formatChatListTime(chatData.lastAt);
+   top.append(name,time);
+   const username=document.createElement("span");username.className="chat-row-username";username.textContent="@"+(peer.username||"keepme_user");
+   const preview=document.createElement("div");preview.className="chat-row-preview";preview.textContent=chatData.lastMessage||"Start chatting";
+   openButton.append(top,username,preview);
+   row.append(avatarBtn,openButton);
+   list.append(row);
+  }
+  if(!list.children.length){
+   const empty=document.createElement("div");empty.className="chat-empty";
+   empty.textContent="No messages yet. When someone chats with you, their profile will appear here.";
+   list.append(empty);
+  }
+ }catch(error){
+  console.error("Load chats error:",error);
+  list.textContent="Chat list error: "+(error.code||error.message);
+ }
+}
+
+$("chatSearchInput").addEventListener("input",()=>{
+ const term=$("chatSearchInput").value.trim().toLowerCase();
+ document.querySelectorAll("#chatList .chat-row").forEach(row=>{
+  row.classList.toggle("hidden",!row.textContent.toLowerCase().includes(term));
+ });
+});
+$("conversationProfileBtn").onclick=()=>{if(activeChatPeer)openOtherProfile(activeChatPeer.uid);};
+$("messageUserBtn").onclick=()=>{if(viewingUser)openChatWith(viewingUser.uid);};
+$("blockUserBtn").onclick=toggleBlockUser;
+$("sendChatMessage").onclick=sendChatMessage;
+$("chatMessageInput").addEventListener("input",()=>{
+ if(!activeChatId||!currentUser)return;
+ updateDoc(doc(db,"chats",activeChatId),{["typing."+currentUser.uid]:!!$("chatMessageInput").value.trim()}).catch(e=>console.warn("Typing status:",e.code));
+ if(typingTimer)clearTimeout(typingTimer);
+ typingTimer=setTimeout(()=>{if(activeChatId)updateDoc(doc(db,"chats",activeChatId),{["typing."+currentUser.uid]:false}).catch(()=>{});},1800);
+});
+$("chatMessageInput").addEventListener("blur",()=>{if(activeChatId&&currentUser)updateDoc(doc(db,"chats",activeChatId),{["typing."+currentUser.uid]:false}).catch(()=>{});});
+$("cancelReply").onclick=clearReply;
+$("chatMessageInput").addEventListener("keydown",event=>{
+ if(event.key==="Enter"&&!event.shiftKey){
+  event.preventDefault();
+  sendChatMessage();
+ }
+});
+$("backToChats").onclick=async()=>{
+ if(stopChatMessages){stopChatMessages();stopChatMessages=null;}
+ if(stopChatMeta){stopChatMeta();stopChatMeta=null;}
+ activeChatId=null;clearReply();activeChatPeer=null;
+ $("conversationCard").classList.add("hidden");
+ $("chatListCard").classList.remove("hidden");
+ $("chatSearchInput").value="";
+ await loadChatList();
+};
+
+async function openOtherProfile(uid){
+ if(uid===currentUser.uid){showPage("myProfilePage");await loadMyProfile();return;}
+ try{
+  const snap=await getDoc(doc(db,"users",uid));if(!snap.exists()){message("User profile not found.");return;}
+  const targetData=snap.data();
+  if(!(await canViewUser(uid,targetData))){message("This is a private account. Follow this user to view their profile.","#ffb4b4");return;}
+  viewingUser={uid,...targetData};
+  $("otherAvatar").textContent=avatars[viewingUser.avatar]||"👦🏻";showPresence("otherPresence",viewingUser);$("otherName").textContent=viewingUser.name||"User";
+  $("otherUsername").textContent="@"+(viewingUser.username||"");$("otherBio").textContent=viewingUser.bio||"";renderProfileExtras("other",viewingUser);renderProfileTheme("other",viewingUser);
+  showPage("otherProfilePage");
+  await setBlockButtonState(uid);
+  $("messageUserBtn").disabled=!(await canMessageUser(uid,targetData));
+  await checkFollow(uid);startOtherFollowCounts(uid);loadOtherUserPosts(uid);
+ }catch(error){console.error(error);message("Profile error: "+error.code,"#ffb4b4");}
+}
+
+async function loadOtherUserPosts(uid){
+ clearProfilePostListeners();
+ const host=$("otherUserPosts");host.innerHTML="Loading posts...";
+ try{
+  const q=query(collection(db,"posts"),where("uid","==",uid),limit(50)),snap=await getDocs(q);
+  const posts=snap.docs.sort((a,b)=>(b.data().createdAt?.toMillis?.()||0)-(a.data().createdAt?.toMillis?.()||0));
+  host.innerHTML="";
+  if(posts.length===0){host.textContent="No posts yet.";return;}
+  posts.forEach(postDoc=>renderProfilePostCard(postDoc,host,viewingUser,false));
+ }catch(error){console.error(error);host.textContent="Could not load posts: "+(error.code||error.message);}
+}
+async function openFollowList(uid,type,title,returnPage){
+ followListReturn=returnPage;$("followListTitle").textContent=title;$("followList").innerHTML="Loading...";showPage("followListPage");
+ try{
+  const snap=await getDocs(collection(db,"users",uid,type));$("followList").innerHTML="";
+  if(snap.empty){$("followList").textContent="No users yet.";return;}
+  for(const item of snap.docs){
+   const userId=item.id,userSnap=await getDoc(doc(db,"users",userId));if(!userSnap.exists())continue;
+   const u=userSnap.data(),row=document.createElement("div");row.className="user-item";
+   const avatar=document.createElement("div");avatar.className="avatar-circle";avatar.textContent=avatars[u.avatar]||"👦🏻";
+   const info=document.createElement("div");info.className="user-info";
+   const name=document.createElement("strong");name.textContent=u.name||"User";
+   const username=document.createElement("div");username.className="username";username.textContent="@"+(u.username||"");
+   info.append(name,username);
+   const viewBtn=document.createElement("button");viewBtn.textContent="View";viewBtn.onclick=()=>openOtherProfile(userId);
+   row.append(avatar,info,viewBtn);$("followList").append(row);
+  }
+ }catch(error){console.error(error);$("followList").textContent="Follow list error: "+error.code;}
+}
+$("followingNavTab").onclick=()=>{setMainNavActive("following");openFollowList(currentUser.uid,"following","Following","feedPage");};
+$("myFollowersBtn").onclick=()=>openFollowList(currentUser.uid,"followers","My Followers","myProfilePage");
+$("myFollowingBtn").onclick=()=>openFollowList(currentUser.uid,"following","My Following","myProfilePage");
+$("otherFollowersBtn").onclick=()=>{if(viewingUser)openFollowList(viewingUser.uid,"followers",viewingUser.name+"'s Followers","otherProfilePage");};
+$("otherFollowingBtn").onclick=()=>{if(viewingUser)openFollowList(viewingUser.uid,"following",viewingUser.name+"'s Following","otherProfilePage");};
+$("backToFeed").onclick=()=>{setMainNavActive("home");if(stopOtherFollowCounts){stopOtherFollowCounts();stopOtherFollowCounts=null;}showPage("feedPage");};
+$("backFromFollowList").onclick=()=>{showPage(followListReturn);if(followListReturn==="otherProfilePage"&&viewingUser)checkFollow(viewingUser.uid);};
+</script>
+</body>
+</html>
